@@ -1,21 +1,38 @@
-# Next.js template
+# Portfolio Design System
 
-This is a Next.js template with shadcn/ui.
+Next.js + shadcn/ui portfolio site with Storybook and Figma token sync.
 
-## Adding components
+## Getting started
 
-To add components to your app, run the following command:
+```bash
+npm run dev        # dev server
+npm run storybook  # Storybook
+npm run build      # production build
+```
+
+## Adding shadcn components
 
 ```bash
 npx shadcn@latest add button
 ```
 
-This will place the ui components in the `components` directory.
+Components are placed in `components/ui/`.
 
-## Using components
+## File structure
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
 ```
+app/                 ← Pages and layouts
+  globals.css        ← Design tokens (CSS variables)
+components/
+  ui/                ← shadcn/ui components
+  portfolio/         ← Custom portfolio components
+hooks/               ← Custom React hooks
+lib/utils.ts         ← cn() helper
+stories/             ← Storybook stories
+.claude/skills/      ← Claude Code skills
+.storybook/          ← Storybook config
+```
+
+## Figma MCP
+
+Cursor connects to Figma via `https://mcp.figma.com/mcp`. Token sync reads `app/globals.css` and writes Figma Variables (and vice versa).
