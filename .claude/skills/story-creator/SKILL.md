@@ -21,7 +21,7 @@ Every **reusable component** gets a story before it goes to a page. Page section
 ## Story structure
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ComponentName } from '@/components/ui/component-name'
 
 const meta: Meta<typeof ComponentName> = {
@@ -41,9 +41,9 @@ export const Default: Story = { args: { children: 'Label' } }
 
 1. One named export per variant (Default, Destructive, Outline, etc.)
 2. `argTypes` with `control: 'select'` for all enum props
-3. Wire `onClick`/`onChange` with `import { fn } from '@storybook/test'`
+3. Wire `onClick`/`onChange` with `import { fn } from 'storybook/test'`
 4. Composed story for multi-part components (Card + CardHeader + CardContent)
-5. DarkMode story: `decorators: [(Story) => <div className="dark bg-background p-4"><Story /></div>]`
+5. DarkMode story: `decorators: [(Story) => <div className="dark rounded-lg bg-background text-foreground p-4"><Story /></div>]` — `text-foreground` is required inside the `.dark` scope because CSS `color` is inherited and resolves at the element where it's declared, not where consumed; without it, components that rely on inherited text color get the light-mode foreground value from the preview decorator
 
 ## Token and text style rules
 

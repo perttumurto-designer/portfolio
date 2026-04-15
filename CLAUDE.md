@@ -2,7 +2,7 @@
 
 ## Project
 
-Next.js App Router + shadcn/ui (preset b3DpPqlRB2) + Tailwind CSS v4 + TypeScript + Storybook 8.
+Next.js App Router + shadcn/ui (preset b3DpPqlRB2) + Tailwind CSS v4 + TypeScript + Storybook 10.
 
 ## Structure
 

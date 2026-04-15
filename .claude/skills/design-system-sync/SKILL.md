@@ -39,6 +39,8 @@ When user asks for detailed audit, expand quick check with:
 - Check that all code colors use token-based Tailwind classes
 - Check that all code text uses project font tokens (`font-sans`, `font-heading`, `font-mono`)
 - Check that no Figma fill uses paint-level opacity combined with a variable-bound color (instances break) — flag these and recommend creating a dedicated variable with alpha baked in
+- Check that opacity-baked variables use correct compound alpha per mode — if a base token has alpha in dark mode (e.g. `--input: oklch(1 0 0 / 15%)`), the baked variable must multiply base alpha × modifier (see token-sync compound alpha rule)
+- Compare Figma component rendering (via `get_screenshot`) with Storybook for each component that has both
 
 ## Fix mode
 

@@ -13,7 +13,7 @@ Translate a Figma frame into production code. This is the primary build skill �
 
 - `get_design_context` with file key + node ID from URL
 - `get_screenshot` for visual reference (this is the accuracy target)
-- `get_variable_defs` for token usage
+- `get_variable_defs` for token usage on specific nodes
 
 ### 2. Map to existing components
 
@@ -56,6 +56,7 @@ Avoid `w-[{n}px]` — prefer responsive utilities. If Figma uses a color not in 
 - Never combine paint-level opacity with a variable-bound fill color — Figma instances silently drop paint opacity back to 1.0
 - For Tailwind `color/opacity` patterns (e.g., `bg-destructive/10`, `bg-input/30`), create a **dedicated variable** with the alpha baked into the value (e.g., `Destructive Background` with `a: 0.1`), then bind the fill to it at paint opacity 1.0
 - The variable's alpha channel IS correctly inherited by instances
+- **Compound alpha**: When the base token already has alpha in dark mode (e.g. `--input: oklch(1 0 0 / 15%)`), baked alpha = base alpha × Tailwind modifier (e.g. 0.15 × 0.3 = 0.045). See token-sync skill for full rule.
 
 ### 6. Validate
 
