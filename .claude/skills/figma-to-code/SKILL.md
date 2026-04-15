@@ -47,6 +47,16 @@ Assemble using existing + new components. Match Figma layout with Tailwind:
 
 Avoid `w-[{n}px]` — prefer responsive utilities. If Figma uses a color not in globals.css, flag it instead of hardcoding.
 
+**Token and text style rules (mandatory):**
+- All colors must be linked to design tokens via Tailwind classes (`bg-primary`, `text-foreground`, `border-border`, etc.) — never hardcode hex/rgb/oklch
+- All text must use the project's font tokens (`font-sans`, `font-heading`, `font-mono`) and appropriate text size/weight classes
+- In Figma: all fills/strokes must be bound to Figma Variables, all text must use Figma Text Styles — no raw hex colors or unlinked text
+
+**Figma paint opacity rule (mandatory):**
+- Never combine paint-level opacity with a variable-bound fill color — Figma instances silently drop paint opacity back to 1.0
+- For Tailwind `color/opacity` patterns (e.g., `bg-destructive/10`, `bg-input/30`), create a **dedicated variable** with the alpha baked into the value (e.g., `Destructive Background` with `a: 0.1`), then bind the fill to it at paint opacity 1.0
+- The variable's alpha channel IS correctly inherited by instances
+
 ### 6. Validate
 
 Run `npm run build`. Compare visually with Figma screenshot.

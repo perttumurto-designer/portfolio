@@ -5,7 +5,7 @@ description: Create Storybook stories for components. Use when adding stories, c
 
 # Story creator
 
-Every component gets a story before it goes to a page.
+Every **reusable component** gets a story before it goes to a page. Page sections, layouts, and one-off compositions (e.g. test cards, demo views) do NOT get stories — only components meant to be reused across the project.
 
 ## File locations
 
@@ -44,6 +44,13 @@ export const Default: Story = { args: { children: 'Label' } }
 3. Wire `onClick`/`onChange` with `import { fn } from '@storybook/test'`
 4. Composed story for multi-part components (Card + CardHeader + CardContent)
 5. DarkMode story: `decorators: [(Story) => <div className="dark bg-background p-4"><Story /></div>]`
+
+## Token and text style rules
+
+- **All colors** must use token-based Tailwind classes (`bg-primary`, `text-muted-foreground`, `border-border`, etc.) — never hardcoded hex/rgb/oklch values
+- **All text** in stories (labels, placeholders, wrappers) must use the project's font tokens (`font-sans`, `font-heading`, `font-mono`) — never rely on browser defaults
+- When adding labels or surrounding text in stories, use `font-sans text-sm font-medium` (or the appropriate typography class) to match the project's text styles
+- Before writing stories, audit the generated component source for hardcoded colors and replace with the appropriate token from `globals.css`
 
 ## Batch mode
 

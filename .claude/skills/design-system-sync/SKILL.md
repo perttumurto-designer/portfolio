@@ -34,6 +34,11 @@ When user asks for detailed audit, expand quick check with:
 - List each token and whether it exists in both code and Figma
 - List each hardcoded violation with file path, line number, and suggested replacement
 - List components that exist in Figma but not in code (and vice versa)
+- Check that all Figma component fills/strokes are bound to Variables (not raw hex)
+- Check that all Figma text layers use Text Styles (not unlinked text)
+- Check that all code colors use token-based Tailwind classes
+- Check that all code text uses project font tokens (`font-sans`, `font-heading`, `font-mono`)
+- Check that no Figma fill uses paint-level opacity combined with a variable-bound color (instances break) — flag these and recommend creating a dedicated variable with alpha baked in
 
 ## Fix mode
 

@@ -30,8 +30,9 @@ Design-first: Figma → Storybook → Pages. Never skip Storybook.
 ## Rules (apply to ALL skills)
 
 - No hardcoded colors/spacing/radius — use CSS variables via Tailwind classes
-- Every component in `components/` MUST have a story in `stories/`
-- New components: Storybook first, pages second
+- Every reusable component in `components/` MUST have a story in `stories/`
+- Page sections, layouts, and one-off compositions do NOT get stories
+- New reusable components: Storybook first, pages second
 - Use `cn()` from `lib/utils` for class merging
 - Functional TypeScript components only
 - `npm run build` after changes
