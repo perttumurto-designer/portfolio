@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { TestCard } from "@/components/portfolio/test-card"
 
 export default function Page() {
   return (
@@ -15,7 +14,6 @@ export default function Page() {
           (Press <kbd>d</kbd> to toggle dark mode)
         </div>
       </div>
-      <TestCard className="max-w-md" />
     </div>
   )
 }
