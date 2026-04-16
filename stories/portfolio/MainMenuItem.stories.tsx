@@ -43,6 +43,17 @@ export const FileUserIcon: Story = {
   args: { label: "History", icon: FileUser },
 }
 
+export const ActiveDarkMode: Story = {
+  args: { label: "Main", icon: House, active: true },
+  decorators: [
+    (Story) => (
+      <div className="dark bg-background p-4 text-foreground">
+        <Story />
+      </div>
+    ),
+  ],
+}
+
 export const DarkMode: Story = {
   args: { label: "Main", icon: House },
   decorators: [

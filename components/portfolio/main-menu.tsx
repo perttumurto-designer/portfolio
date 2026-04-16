@@ -1,6 +1,12 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react"
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoLottie } from "@/components/portfolio/logo-lottie"
@@ -11,6 +17,7 @@ export interface MenuItem {
   icon?: LucideIcon
   href?: string
   active?: boolean
+  onClick?: () => void
 }
 
 interface MainMenuProps {
@@ -20,7 +27,17 @@ interface MainMenuProps {
 
 export function MainMenu({ items, className }: MainMenuProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const itemsContainerRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const hasMounted = useRef(false)
   const [isDark, setIsDark] = useState(false)
+  const [indicator, setIndicator] = useState<{
+    left: number
+    width: number
+  } | null>(null)
+  const [animate, setAnimate] = useState(false)
+
+  const activeIndex = items.findIndex((item) => item.active)
 
   const check = useCallback(() => {
     if (ref.current) {
@@ -39,6 +56,35 @@ export function MainMenu({ items, className }: MainMenuProps) {
     return () => observer.disconnect()
   }, [check])
 
+  // Measure active item and position the floating indicator
+  const measure = useCallback(() => {
+    if (activeIndex < 0 || !itemRefs.current[activeIndex]) return
+    const item = itemRefs.current[activeIndex]!
+    setIndicator({
+      left: item.offsetLeft,
+      width: item.offsetWidth,
+    })
+  }, [activeIndex])
+
+  // Measure on active change; skip transition on first render
+  useLayoutEffect(() => {
+    measure()
+    if (!hasMounted.current) {
+      hasMounted.current = true
+    } else {
+      setAnimate(true)
+    }
+  }, [measure])
+
+  // Recalculate on resize
+  useEffect(() => {
+    const container = itemsContainerRef.current
+    if (!container) return
+    const ro = new ResizeObserver(measure)
+    ro.observe(container)
+    return () => ro.disconnect()
+  }, [measure])
+
   return (
     <div
       ref={ref}
@@ -48,13 +94,27 @@ export function MainMenu({ items, className }: MainMenuProps) {
       )}
     >
       <LogoLottie isDark={isDark} />
-      <div className="flex items-center">
-        {items.map((item) => (
+      <div ref={itemsContainerRef} className="relative flex items-center">
+        {/* Floating active indicator */}
+        {indicator && activeIndex >= 0 && (
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-y-0 rounded-4xl border border-mainmenu-content",
+              animate && "transition-all duration-300 ease-out",
+            )}
+            style={{ left: indicator.left, width: indicator.width }}
+          />
+        )}
+        {items.map((item, index) => (
           <MainMenuItem
             key={item.label}
+            ref={(el) => {
+              itemRefs.current[index] = el
+            }}
             label={item.label}
             icon={item.icon}
             active={item.active}
+            onClick={item.onClick}
           />
         ))}
       </div>

@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { House, Layers, Info, FileUser, Bot, Paintbrush } from "lucide-react"
 import { MainMenu } from "@/components/portfolio/main-menu"
@@ -30,6 +31,37 @@ export const WithActiveItem: Story = {
       { label: "About", icon: Info },
       { label: "History", icon: FileUser },
     ],
+  },
+}
+
+export const Interactive: Story = {
+  render: function InteractiveMenu() {
+    const [activeIndex, setActiveIndex] = useState(0)
+    const items = defaultItems.map((item, i) => ({
+      ...item,
+      active: i === activeIndex,
+      onClick: () => setActiveIndex(i),
+    }))
+    return <MainMenu items={items} />
+  },
+}
+
+export const InteractiveDarkMode: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark bg-background p-4 text-foreground">
+        <Story />
+      </div>
+    ),
+  ],
+  render: function InteractiveDarkMenu() {
+    const [activeIndex, setActiveIndex] = useState(0)
+    const items = defaultItems.map((item, i) => ({
+      ...item,
+      active: i === activeIndex,
+      onClick: () => setActiveIndex(i),
+    }))
+    return <MainMenu items={items} />
   },
 }
 
