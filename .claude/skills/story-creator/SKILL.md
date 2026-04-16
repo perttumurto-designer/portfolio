@@ -52,6 +52,13 @@ export const Default: Story = { args: { children: 'Label' } }
 - When adding labels or surrounding text in stories, use `font-sans text-sm font-medium` (or the appropriate typography class) to match the project's text styles
 - Before writing stories, audit the generated component source for hardcoded colors and replace with the appropriate token from `globals.css`
 
+## Storybook + Vite compatibility rules
+
+- **Import Meta/StoryObj from `@storybook/nextjs-vite`** — not `@storybook/react`. The project uses the nextjs-vite framework. Using `@storybook/react` causes type mismatches and `@storybook/test` may not be resolvable during `next build`.
+- **Never add providers (ThemeProvider, etc.) to `.storybook/preview.tsx`** — `next-themes` ThemeProvider crashes Storybook's iframe context. The existing decorator uses CSS classes for dark mode, which is sufficient. If a component needs theme detection, use DOM class observation (MutationObserver on `document.documentElement.classList`), not `useTheme()`.
+- **Use named exports from libraries, not default exports** — packages like `lottie-react` have ESM/CJS interop issues with Vite where `import Lottie from 'lottie-react'` resolves to a module object instead of the component. Use named exports like `useLottie` hook, or verify the default export works in both Next.js and Storybook before shipping.
+- **Always test stories in Storybook after creating them** — `npm run build` passing does NOT guarantee Storybook works. Vite (Storybook) and Turbopack (Next.js) resolve modules differently.
+
 ## Batch mode
 
 When creating stories for all components: list `components/ui/` and `components/portfolio/`, read each source file for props/variants, generate story files. Skip components that already have stories.
