@@ -140,3 +140,123 @@
     @apply font-sans;
     }
 }
+
+/* ── Typography — synced from Figma text styles ── */
+
+/* Headings (font-heading = JetBrains Mono) */
+@utility text-heading-h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h1-mobile {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h2 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.875rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h3 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h4 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+/* Body (font-sans = Inter) */
+@utility text-body-paragraph {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+}
+
+@utility text-body-lead {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+@utility text-body-large {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+}
+
+@utility text-body-small {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  letter-spacing: 0;
+}
+
+@utility text-body-muted {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+  color: var(--muted-foreground);
+}
+
+@utility text-body-blockquote {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+/* Code (font-mono = Geist Mono) */
+@utility text-code-inline {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+/* Button (font-sans = Inter) */
+@utility text-button-default {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+@utility text-button-xs {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
