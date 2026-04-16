@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { MainMenu } from "@/components/portfolio/main-menu"
+import { MobileMainMenu } from "@/components/portfolio/mobile-main-menu"
+import { ResponsiveMenu } from "@/components/portfolio/responsive-menu"
 import { House, Layers, Info, FileUser } from "lucide-react"
 
 const menuItems = [
@@ -25,6 +27,18 @@ export default function Page() {
           <h2 className="font-medium">MainMenu</h2>
           <div className="mt-2">
             <MainMenu items={menuItems} />
+          </div>
+        </div>
+        <div>
+          <h2 className="font-medium">MobileMainMenu</h2>
+          <div className="mt-2 max-w-sm">
+            <MobileMainMenu items={menuItems} />
+          </div>
+        </div>
+        <div>
+          <h2 className="font-medium">ResponsiveMenu (resize browser)</h2>
+          <div className="mt-2">
+            <ResponsiveMenu items={menuItems} />
           </div>
         </div>
         <div className="font-mono text-xs text-muted-foreground">

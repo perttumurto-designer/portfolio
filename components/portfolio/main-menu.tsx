@@ -2,11 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import type { LucideIcon } from "lucide-react"
-import { useLottie } from "lottie-react"
 import { cn } from "@/lib/utils"
+import { LogoLottie } from "@/components/portfolio/logo-lottie"
 import { MainMenuItem } from "@/components/portfolio/main-menu-item"
-import logoLottieLight from "@/data/logo-lottie-light.json"
-import logoLottieDark from "@/data/logo-lottie-dark.json"
 
 export interface MenuItem {
   label: string
@@ -18,15 +16,6 @@ export interface MenuItem {
 interface MainMenuProps {
   items: MenuItem[]
   className?: string
-}
-
-function LogoLottie({ isDark }: { isDark: boolean }) {
-  const { View } = useLottie({
-    animationData: isDark ? logoLottieDark : logoLottieLight,
-    loop: true,
-  })
-
-  return <div className="h-[26px] w-[57px] shrink-0">{View}</div>
 }
 
 export function MainMenu({ items, className }: MainMenuProps) {
