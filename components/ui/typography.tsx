@@ -8,10 +8,7 @@ const H1 = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h1
     ref={ref}
-    className={cn(
-      "font-heading text-4xl font-bold tracking-tight lg:text-5xl",
-      className
-    )}
+    className={cn("text-heading-h1", className)}
     {...props}
   />
 ))
@@ -92,7 +89,7 @@ const Large = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("font-sans text-lg font-semibold", className)}
+    className={cn("text-body-large", className)}
     {...props}
   />
 ))
@@ -104,7 +101,7 @@ const Small = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <small
     ref={ref}
-    className={cn("font-sans text-sm font-medium leading-none", className)}
+    className={cn("text-body-small", className)}
     {...props}
   />
 ))

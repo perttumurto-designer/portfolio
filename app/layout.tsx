@@ -1,4 +1,5 @@
 import { Geist_Mono, Inter, JetBrains_Mono } from "next/font/google"
+import localFont from "next/font/local"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -13,6 +14,14 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+const helveticaNowDisplay = localFont({
+  src: "../public/fonts/HelveticaNowDisplay-Regular.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-display",
+  display: "swap",
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable, jetbrainsMonoHeading.variable)}
+      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable, jetbrainsMonoHeading.variable, helveticaNowDisplay.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>

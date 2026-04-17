@@ -23,7 +23,7 @@ export default meta
 
 type Story = StoryObj
 
-// --- Headings (font-heading: JetBrains Mono) ---
+// --- Headings (H1: Helvetica Now Display; H2–H4: JetBrains Mono) ---
 
 export const Heading1: Story = {
   render: () => <H1>The art of building interfaces</H1>,
@@ -41,7 +41,7 @@ export const Heading4: Story = {
   render: () => <H4>Font pairing</H4>,
 }
 
-// --- Body text (font-sans: Inter) ---
+// --- Body text (Large + Small: Helvetica Now Display; Paragraph/Lead/Muted/Blockquote: Inter) ---
 
 export const ParagraphStory: Story = {
   name: "Paragraph",
@@ -107,7 +107,7 @@ export const BlockquoteStory: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div className="space-y-6">
-      <H1>Heading 1 — JetBrains Mono</H1>
+      <H1>Heading 1 — Helvetica Now Display</H1>
       <H2>Heading 2 — JetBrains Mono</H2>
       <H3>Heading 3 — JetBrains Mono</H3>
       <H4>Heading 4 — JetBrains Mono</H4>
@@ -124,8 +124,8 @@ export const AllVariants: Story = {
         Another paragraph with <InlineCode>inline code</InlineCode> in Geist
         Mono.
       </Paragraph>
-      <Large>Large text — Inter</Large>
-      <Small>Small text — Inter</Small>
+      <Large>Large text — Helvetica Now Display</Large>
+      <Small>Small text — Helvetica Now Display</Small>
       <Muted>Muted text — Inter</Muted>
       <Blockquote>
         Blockquote — Inter italic. Design is not just what it looks like.
@@ -139,7 +139,7 @@ export const AllVariants: Story = {
 export const DarkMode: Story = {
   render: () => (
     <div className="space-y-6">
-      <H1>Heading 1 — JetBrains Mono</H1>
+      <H1>Heading 1 — Helvetica Now Display</H1>
       <H2>Heading 2 — JetBrains Mono</H2>
       <H3>Heading 3 — JetBrains Mono</H3>
       <H4>Heading 4 — JetBrains Mono</H4>
@@ -154,8 +154,8 @@ export const DarkMode: Story = {
         Another paragraph with <InlineCode>inline code</InlineCode> in Geist
         Mono.
       </Paragraph>
-      <Large>Large text — Inter</Large>
-      <Small>Small text — Inter</Small>
+      <Large>Large text — Helvetica Now Display</Large>
+      <Small>Small text — Helvetica Now Display</Small>
       <Muted>Muted text — Inter</Muted>
       <Blockquote>
         Blockquote — Inter italic. Design is not just what it looks like.

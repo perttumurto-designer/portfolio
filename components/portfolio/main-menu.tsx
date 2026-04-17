@@ -86,7 +86,7 @@ export function MainMenu({ items, className }: MainMenuProps) {
     <div
       ref={ref}
       className={cn(
-        "inline-flex items-center gap-2.5 rounded-lg border border-mainmenu-border bg-mainmenu-background px-3.5 py-2.5",
+        "inline-flex items-center gap-8 rounded-lg border border-mainmenu-border bg-mainmenu-background px-3.5 py-2.5",
         className,
       )}
     >
