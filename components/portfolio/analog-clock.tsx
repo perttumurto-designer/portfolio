@@ -12,9 +12,13 @@ export function AnalogClock({ size = 200, className }: AnalogClockProps) {
   const [time, setTime] = useState<Date | null>(null)
 
   useEffect(() => {
-    setTime(new Date())
-    const id = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(id)
+    const update = () => setTime(new Date())
+    const t = setTimeout(update, 0)
+    const id = setInterval(update, 1000)
+    return () => {
+      clearTimeout(t)
+      clearInterval(id)
+    }
   }, [])
 
   // Default to 10:10:30 for SSR (classic clock display position)

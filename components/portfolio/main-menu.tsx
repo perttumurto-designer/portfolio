@@ -34,8 +34,8 @@ export function MainMenu({ items, className }: MainMenuProps) {
   const [indicator, setIndicator] = useState<{
     left: number
     width: number
+    animate: boolean
   } | null>(null)
-  const [animate, setAnimate] = useState(false)
 
   const activeIndex = items.findIndex((item) => item.active)
 
@@ -63,17 +63,14 @@ export function MainMenu({ items, className }: MainMenuProps) {
     setIndicator({
       left: item.offsetLeft,
       width: item.offsetWidth,
+      animate: hasMounted.current,
     })
+    hasMounted.current = true
   }, [activeIndex])
 
-  // Measure on active change; skip transition on first render
+  // Measure on active change
   useLayoutEffect(() => {
     measure()
-    if (!hasMounted.current) {
-      hasMounted.current = true
-    } else {
-      setAnimate(true)
-    }
   }, [measure])
 
   // Recalculate on resize
@@ -100,7 +97,7 @@ export function MainMenu({ items, className }: MainMenuProps) {
           <div
             className={cn(
               "pointer-events-none absolute inset-y-0 rounded-4xl border border-mainmenu-content",
-              animate && "transition-all duration-300 ease-out",
+              indicator.animate && "transition-all duration-300 ease-out",
             )}
             style={{ left: indicator.left, width: indicator.width }}
           />

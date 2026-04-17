@@ -16,6 +16,7 @@ export const MainMenuItem = forwardRef<HTMLButtonElement, MainMenuItemProps>(
       <button
         ref={ref}
         type="button"
+        aria-current={active ? "true" : undefined}
         onClick={onClick}
         className={cn(
           "flex items-center justify-center gap-1.5 rounded-4xl border border-transparent px-3.5 py-2.5 font-sans text-sm font-medium text-mainmenu-content transition-colors",

@@ -203,7 +203,7 @@
 
 @utility text-body-large {
   font-family: var(--font-sans);
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1.125rem;
   line-height: 1.5rem;
   letter-spacing: 0;

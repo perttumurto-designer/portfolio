@@ -105,7 +105,6 @@ export const BlockquoteStory: Story = {
 // --- Composed ---
 
 export const AllVariants: Story = {
-  name: "All Variants",
   render: () => (
     <div className="space-y-6">
       <H1>Heading 1 — JetBrains Mono</H1>

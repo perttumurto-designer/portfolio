@@ -1,0 +1,4 @@
+{
+  "css.validate": false,
+  "tailwindCSS.experimental.configFile": ".storybook/tailwind.config.ts"
+}
