@@ -155,7 +155,11 @@
     canvas.setAttribute('aria-hidden', 'true');
     canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;';
     host.appendChild(canvas);
-    const ctx = canvas.getContext('2d', { alpha: opts.background === 'transparent', desynchronized: true });
+    // NOTE: `desynchronized: true` was removed. On mobile Chromium (Samsung
+    // AMOLED especially) it bypasses the compositor and causes visible flicker
+    // that screen capture doesn't record — because screen capture goes through
+    // the compositor, but the display doesn't.
+    const ctx = canvas.getContext('2d', { alpha: opts.background === 'transparent' });
 
     let width = 0, height = 0;
     let cols = 0, rows = 0;
@@ -286,6 +290,11 @@
       cancelAnimationFrame(rafId);
     }
 
+    // mobile: cap effective framerate to ~30fps. Halves per-frame dot motion,
+    // which in turn halves the work OLED temporal dithering has to do — the
+    // biggest driver of the residual "flicker" on Samsung AMOLED screens.
+    const minFrameMs = mobile ? 33 : 0;
+    let lastRenderT = 0;
     function frame(now) {
       if (!running) return;
       lastDrawTime = now;
@@ -303,6 +312,11 @@
         if (pointerX < -900) pointerX = -9999;
       }
 
+      if (now - lastRenderT < minFrameMs) {
+        rafId = requestAnimationFrame(frame);
+        return;
+      }
+      lastRenderT = now;
       render(now);
 
       const cursorDim = (pointerX < -900);
