@@ -122,6 +122,10 @@
 
     const opts = Object.assign({}, DEFAULTS, userOpts);
     const mobile = opts.autoMobile && isMobile();
+    // only devices with a real hover pointer (mouse, trackpad, pen) drive the
+    // cursor swirl. touch-only devices fire pointermove during scroll, which
+    // otherwise makes the background follow the scrolling finger.
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     if (mobile) {
       opts.spacing = Math.round(opts.spacing * opts.mobileSpacingBoost);
       opts.maxDpr = Math.min(opts.maxDpr, opts.mobileMaxDpr);
@@ -171,12 +175,19 @@
     let [cr, cg, cb, ca] = parseColor(opts.color);
 
     let resizeRaf = 0;
+    let prevW = 0, prevH = 0;
     function resize() {
       cancelAnimationFrame(resizeRaf);
       resizeRaf = requestAnimationFrame(() => {
         hostRect = host.getBoundingClientRect();
-        width = hostRect.width;
-        height = hostRect.height;
+        const w = hostRect.width, h = hostRect.height;
+        // mobile browsers resize the viewport as the URL bar hides/shows during
+        // scroll. Width stays constant; height wobbles by ~60–120 px. Skip the
+        // canvas redraw in that case so the wave pattern doesn't visibly jitter.
+        if (mobile && prevW && w === prevW && Math.abs(h - prevH) < 150) return;
+        prevW = w; prevH = h;
+        width = w;
+        height = h;
         dpr = Math.min(opts.maxDpr, window.devicePixelRatio || 1);
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
@@ -216,23 +227,33 @@
       if (cx == null) return;
       ripples.push({ x: cx - hostRect.left, y: cy - hostRect.top, born: performance.now() });
       if (ripples.length > 5) ripples.shift();
-      targetX = cx - hostRect.left; targetY = cy - hostRect.top;
-      pointerInside = true;
+      // only anchor the swirl on hover-capable devices. On touch, a tap would
+      // otherwise leave the swirl permanently stuck at the tap coordinates —
+      // there's no pointerleave on touch to release it.
+      if (canHover) {
+        targetX = cx - hostRect.left; targetY = cy - hostRect.top;
+        pointerInside = true;
+      }
       kick();
     }
 
     const passive = { passive: true };
     const hasPointer = 'PointerEvent' in window;
     if (hasPointer) {
-      document.addEventListener('pointermove', onPointerMove, passive);
       document.addEventListener('pointerdown', onPress, passive);
-      document.addEventListener('pointerleave', onPointerLeave, passive);
+      if (canHover) {
+        document.addEventListener('pointermove', onPointerMove, passive);
+        document.addEventListener('pointerleave', onPointerLeave, passive);
+      }
     } else {
-      document.addEventListener('mousemove', onPointerMove, passive);
       document.addEventListener('mousedown', onPress, passive);
-      document.addEventListener('mouseleave', onPointerLeave, passive);
       document.addEventListener('touchstart', onPress, passive);
-      document.addEventListener('touchmove', onPointerMove, passive);
+      if (canHover) {
+        document.addEventListener('mousemove', onPointerMove, passive);
+        document.addEventListener('mouseleave', onPointerLeave, passive);
+      }
+      // deliberately no touchmove — on mobile it fires during scroll and would
+      // make the background follow the scrolling finger.
     }
     window.addEventListener('scroll', onScroll, passive);
     window.addEventListener('resize', resize, passive);
@@ -727,15 +748,18 @@
         window.removeEventListener('resize', resize);
         document.removeEventListener('visibilitychange', onVis);
         if (hasPointer) {
-          document.removeEventListener('pointermove', onPointerMove);
           document.removeEventListener('pointerdown', onPress);
-          document.removeEventListener('pointerleave', onPointerLeave);
+          if (canHover) {
+            document.removeEventListener('pointermove', onPointerMove);
+            document.removeEventListener('pointerleave', onPointerLeave);
+          }
         } else {
-          document.removeEventListener('mousemove', onPointerMove);
           document.removeEventListener('mousedown', onPress);
-          document.removeEventListener('mouseleave', onPointerLeave);
           document.removeEventListener('touchstart', onPress);
-          document.removeEventListener('touchmove', onPointerMove);
+          if (canHover) {
+            document.removeEventListener('mousemove', onPointerMove);
+            document.removeEventListener('mouseleave', onPointerLeave);
+          }
         }
         canvas.remove();
       },
