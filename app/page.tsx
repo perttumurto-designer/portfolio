@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { ResponsiveMenu } from "@/components/portfolio/responsive-menu"
 import { AnalogClock2 } from "@/components/portfolio/analog-clock-2"
 import { House, Layers, Info, FileUser } from "lucide-react"
@@ -14,29 +13,10 @@ const menuItems = [
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh flex-col gap-6 p-4 md:p-6">
-      <div className="flex w-full min-w-0 max-w-md flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div>
-          <h2 className="font-medium">Main menu</h2>
-          <div className="mt-2">
-            <ResponsiveMenu items={menuItems} />
-          </div>
-        </div>
-        <div>
-          <h2 className="font-medium">Clock 2 (chronograph)</h2>
-          <div className="mt-2">
-            <AnalogClock2 size={240} />
-          </div>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
+    <div className="flex min-h-svh items-center justify-center p-4 md:p-6">
+      <div className="flex flex-col items-center gap-8">
+        <ResponsiveMenu items={menuItems} />
+        <AnalogClock2 size={240} />
       </div>
     </div>
   )
