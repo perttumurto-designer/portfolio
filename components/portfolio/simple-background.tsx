@@ -142,9 +142,16 @@ export default function SimpleBackground({
       className={className}
       style={{
         position: "fixed",
-        inset: 0,
+        top: 0,
+        left: 0,
+        width: "100vw",
+        // 100lvh = "large viewport height" — the viewport with the URL bar
+        // hidden. Stays constant as mobile browsers show/hide the address bar,
+        // so the canvas never stretches or re-lays out during scroll.
+        height: "100lvh",
         zIndex: 0,
         pointerEvents: "none",
+        overflow: "hidden",
         ...style,
       }}
     />
