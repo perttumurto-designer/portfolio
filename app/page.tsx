@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ResponsiveMenu } from "@/components/portfolio/responsive-menu"
+import { AnalogClock2 } from "@/components/portfolio/analog-clock-2"
 import { House, Layers, Info, FileUser } from "lucide-react"
 
 const menuItems = [
@@ -25,6 +26,12 @@ export default function Page() {
           <h2 className="font-medium">Main menu</h2>
           <div className="mt-2">
             <ResponsiveMenu items={menuItems} />
+          </div>
+        </div>
+        <div>
+          <h2 className="font-medium">Clock 2 (chronograph)</h2>
+          <div className="mt-2">
+            <AnalogClock2 size={240} />
           </div>
         </div>
         <div className="font-mono text-xs text-muted-foreground">
