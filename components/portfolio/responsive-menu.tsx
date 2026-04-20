@@ -10,7 +10,7 @@ interface ResponsiveMenuProps {
 export function ResponsiveMenu({ items, className }: ResponsiveMenuProps) {
   return (
     <>
-      <div className="md:hidden">
+      <div className="w-full md:hidden">
         <MobileMainMenu items={items} className={className} />
       </div>
       <div className="hidden md:inline-flex">

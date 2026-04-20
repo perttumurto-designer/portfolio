@@ -13,9 +13,9 @@ const menuItems = [
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh items-center justify-center p-4 md:p-6">
-      <div className="flex flex-col items-center gap-8">
-        <ResponsiveMenu items={menuItems} />
+    <div className="flex min-h-svh flex-col px-5 pt-8 pb-5 md:px-6 md:pb-6">
+      <ResponsiveMenu items={menuItems} />
+      <div className="flex flex-1 items-center justify-center">
         <AnalogClock2 size={240} />
       </div>
     </div>
