@@ -154,17 +154,25 @@
 }
 
 @utility text-heading-h1-mobile {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 2.25rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
   line-height: normal;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 @utility text-heading-h2 {
   font-family: var(--font-heading);
   font-weight: 500;
   font-size: 1.875rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h2-mobile {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.375rem;
   line-height: normal;
   letter-spacing: -0.02em;
 }
@@ -177,10 +185,26 @@
   letter-spacing: -0.02em;
 }
 
+@utility text-heading-h3-mobile {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
 @utility text-heading-h4 {
   font-family: var(--font-heading);
   font-weight: 500;
   font-size: 1.25rem;
+  line-height: normal;
+  letter-spacing: -0.02em;
+}
+
+@utility text-heading-h4-mobile {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.125rem;
   line-height: normal;
   letter-spacing: -0.02em;
 }
@@ -194,10 +218,26 @@
   letter-spacing: 0;
 }
 
+@utility text-body-paragraph-mobile {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+}
+
 @utility text-body-lead {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 1.25rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+@utility text-body-lead-mobile {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.125rem;
   line-height: normal;
   letter-spacing: 0;
 }
@@ -210,6 +250,14 @@
   letter-spacing: 0;
 }
 
+@utility text-body-large-mobile {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.375rem;
+  letter-spacing: 0;
+}
+
 @utility text-body-small {
   font-family: var(--font-display);
   font-weight: 400;
@@ -218,7 +266,24 @@
   letter-spacing: 0;
 }
 
+@utility text-body-small-mobile {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  letter-spacing: 0;
+}
+
 @utility text-body-muted {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+  color: var(--muted-foreground);
+}
+
+@utility text-body-muted-mobile {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 0.875rem;
@@ -236,8 +301,25 @@
   letter-spacing: 0;
 }
 
+@utility text-body-blockquote-mobile {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
 /* Code (font-mono = Geist Mono) */
 @utility text-code-inline {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+@utility text-code-inline-mobile {
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 0.875rem;
@@ -254,10 +336,43 @@
   letter-spacing: 0;
 }
 
+@utility text-button-default-mobile {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
 @utility text-button-xs {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 0.75rem;
   line-height: normal;
+  letter-spacing: 0;
+}
+
+@utility text-button-xs-mobile {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: normal;
+  letter-spacing: 0;
+}
+
+/* Mono (font-heading = JetBrains Mono) */
+@utility text-mono-label {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 0.75rem;
+  letter-spacing: 0;
+}
+
+@utility text-mono-label-mobile {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 0.75rem;
   letter-spacing: 0;
 }

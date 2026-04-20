@@ -82,3 +82,7 @@ Create demonstration instances matching each Storybook story:
 2. Toggle Light/Dark modes — all variable-bound fills should switch correctly
 3. Verify designers can configure nested instances (change variant, size, text)
 4. Check no stray nodes left on the page — list all top-level nodes and clean up
+
+## Responsive variants
+
+If the code component splits behavior by breakpoint (uses `md:` classes or has a `<Mobile* />`/`<Desktop* />` pair), the Figma component set must expose matching variants — one frame per breakpoint, organized as a variant property `Breakpoint = Mobile | Desktop`. Mirror the Storybook Mobile + Desktop stories (see story-creator skill) 1:1 so designers can switch modes via the variant picker.

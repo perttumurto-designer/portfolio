@@ -42,6 +42,15 @@ When user asks for detailed audit, expand quick check with:
 - Check that opacity-baked variables use correct compound alpha per mode — if a base token has alpha in dark mode (e.g. `--input: oklch(1 0 0 / 15%)`), the baked variable must multiply base alpha × modifier (see token-sync compound alpha rule)
 - Compare Figma component rendering (via `get_screenshot`) with Storybook for each component that has both
 
+## Responsive audit
+
+When auditing, flag:
+- Components using fixed pixel widths (`w-[Npx]`, `min-w-[Npx]`) — replace with fluid/max-width utilities
+- Reusable components without Mobile + Desktop Storybook stories (required when the component has any `md:` / `lg:` / `xl:` classes or structural breakpoint split)
+- Pages/sections that horizontal-scroll at 375px
+- JS breakpoint checks using raw `matchMedia` or inline `window.innerWidth` comparisons — replace with `useIsMobile` from [@/hooks/use-is-mobile](../../../hooks/use-is-mobile.ts)
+- Hardcoded breakpoint pixel values in TS/JS — import from [lib/breakpoints.ts](../../../lib/breakpoints.ts) instead
+
 ## Fix mode
 
 When user asks to "fix" or "fix everything":

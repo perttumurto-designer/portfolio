@@ -8,7 +8,7 @@ const H1 = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h1
     ref={ref}
-    className={cn("text-heading-h1", className)}
+    className={cn("text-heading-h1-mobile md:text-heading-h1", className)}
     {...props}
   />
 ))
@@ -20,10 +20,7 @@ const H2 = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h2
     ref={ref}
-    className={cn(
-      "font-heading text-3xl font-semibold tracking-tight",
-      className
-    )}
+    className={cn("text-heading-h2-mobile md:text-heading-h2", className)}
     {...props}
   />
 ))
@@ -35,10 +32,7 @@ const H3 = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn(
-      "font-heading text-2xl font-semibold tracking-tight",
-      className
-    )}
+    className={cn("text-heading-h3-mobile md:text-heading-h3", className)}
     {...props}
   />
 ))
@@ -50,10 +44,7 @@ const H4 = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h4
     ref={ref}
-    className={cn(
-      "font-heading text-xl font-semibold tracking-tight",
-      className
-    )}
+    className={cn("text-heading-h4-mobile md:text-heading-h4", className)}
     {...props}
   />
 ))
@@ -65,7 +56,10 @@ const Paragraph = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("font-sans leading-7 [&:not(:first-child)]:mt-6", className)}
+    className={cn(
+      "text-body-paragraph-mobile md:text-body-paragraph [&:not(:first-child)]:mt-6",
+      className
+    )}
     {...props}
   />
 ))
@@ -77,7 +71,10 @@ const Lead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("font-sans text-xl text-muted-foreground", className)}
+    className={cn(
+      "text-body-lead-mobile md:text-body-lead text-muted-foreground",
+      className
+    )}
     {...props}
   />
 ))
@@ -89,7 +86,7 @@ const Large = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-body-large", className)}
+    className={cn("text-body-large-mobile md:text-body-large", className)}
     {...props}
   />
 ))
@@ -101,7 +98,7 @@ const Small = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <small
     ref={ref}
-    className={cn("text-body-small", className)}
+    className={cn("text-body-small-mobile md:text-body-small", className)}
     {...props}
   />
 ))
@@ -113,7 +110,7 @@ const Muted = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("font-sans text-sm text-muted-foreground", className)}
+    className={cn("text-body-muted-mobile md:text-body-muted", className)}
     {...props}
   />
 ))
@@ -126,7 +123,7 @@ const InlineCode = React.forwardRef<
   <code
     ref={ref}
     className={cn(
-      "font-mono relative rounded bg-muted px-[0.3rem] py-[0.2rem] text-sm font-semibold",
+      "text-code-inline-mobile md:text-code-inline relative rounded bg-muted px-[0.3rem] py-[0.2rem]",
       className
     )}
     {...props}
@@ -140,11 +137,26 @@ const Blockquote = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <blockquote
     ref={ref}
-    className={cn("font-sans mt-6 border-l-2 pl-6 italic", className)}
+    className={cn(
+      "text-body-blockquote-mobile md:text-body-blockquote mt-6 border-l-2 pl-6",
+      className
+    )}
     {...props}
   />
 ))
 Blockquote.displayName = "Blockquote"
+
+const Label = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<"span">
+>(({ className, ...props }, ref) => (
+  <span
+    ref={ref}
+    className={cn("text-mono-label-mobile md:text-mono-label", className)}
+    {...props}
+  />
+))
+Label.displayName = "Label"
 
 export {
   H1,
@@ -158,4 +170,5 @@ export {
   Muted,
   InlineCode,
   Blockquote,
+  Label,
 }

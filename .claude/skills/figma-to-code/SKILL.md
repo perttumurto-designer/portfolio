@@ -58,6 +58,14 @@ Avoid `w-[{n}px]` — prefer responsive utilities. If Figma uses a color not in 
 - The variable's alpha channel IS correctly inherited by instances
 - **Compound alpha**: When the base token already has alpha in dark mode (e.g. `--input: oklch(1 0 0 / 15%)`), baked alpha = base alpha × Tailwind modifier (e.g. 0.15 × 0.3 = 0.045). See token-sync skill for full rule.
 
+### 5.5 Responsive behavior
+
+If the Figma design has mobile and desktop frames, match both. If only one frame exists:
+- Ask whether a mobile variant exists / should be designed — don't invent one silently
+- At minimum, make the implementation reflow sanely at 375px (no horizontal scroll, no clipped content)
+
+Prefer responsive Tailwind classes over dual components. Split into `<Mobile* />` + `<Desktop* />` only when DOM trees genuinely differ. Verify at 375 / 768 / 1280.
+
 ### 6. Validate
 
-Run `npm run build`. Compare visually with Figma screenshot.
+Run `npm run build`. Compare visually with Figma screenshot at mobile (375), tablet (768), and desktop (1280) widths.

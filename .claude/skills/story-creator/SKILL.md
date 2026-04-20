@@ -45,6 +45,24 @@ export const Default: Story = { args: { children: 'Label' } }
 4. Composed story for multi-part components (Card + CardHeader + CardContent)
 5. DarkMode story: `decorators: [(Story) => <div className="dark rounded-lg bg-background text-foreground p-4"><Story /></div>]` — `text-foreground` is required inside the `.dark` scope because CSS `color` is inherited and resolves at the element where it's declared, not where consumed; without it, components that rely on inherited text color get the light-mode foreground value from the preview decorator
 
+## Responsive viewports
+
+The Storybook viewport addon is configured with Mobile (375), Tablet (768), Desktop (1280), Wide (1440) presets, sourced from [lib/breakpoints.ts](../../../lib/breakpoints.ts).
+
+- **Components with responsive behavior** (any use of `md:` / `lg:` / `xl:` prefixes, or a structural split) MUST include at least `Mobile` and `Desktop` stories:
+  ```tsx
+  export const Mobile: Story = {
+    args: { /* ... */ },
+    parameters: { viewport: { defaultViewport: 'mobile' } },
+  }
+  export const Desktop: Story = {
+    args: { /* ... */ },
+    parameters: { viewport: { defaultViewport: 'desktop' } },
+  }
+  ```
+- **Purely presentational components** (button, badge, icon) don't need viewport stories — the default centered layout is enough
+- When in doubt, add the viewport stories — it takes 30 seconds and catches a lot
+
 ## Token and text style rules
 
 - **All colors** must use token-based Tailwind classes (`bg-primary`, `text-muted-foreground`, `border-border`, etc.) — never hardcoded hex/rgb/oklch values

@@ -44,4 +44,11 @@ Import and use directly — no API calls needed for static portfolio.
 
 ## Responsive
 
-Mobile first → `md:` (768px) → `lg:` (1024px).
+Mobile first. Write base styles for 375px, then add `md:` (768px, the mobile/desktop boundary), `lg:` (1024px), `xl:` (1280px) as needed.
+
+- Prefer Tailwind responsive classes: `flex-col md:flex-row`, `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- For structural swap (different DOM per breakpoint), mirror the [responsive-menu.tsx](../../../components/portfolio/responsive-menu.tsx) dual-render pattern
+- For JS-side breakpoint detection, import `useIsMobile` from [@/hooks/use-is-mobile](../../../hooks/use-is-mobile.ts) — never call `matchMedia` inline
+- Page sections in `app/page.tsx` must read well at 375px without horizontal scroll
+- Navigation/menus: always provide both desktop and mobile variants (see [ResponsiveMenu](../../../components/portfolio/responsive-menu.tsx))
+- Verify on 375 / 768 / 1280 before shipping

@@ -12,6 +12,7 @@ import {
   Muted,
   InlineCode,
   Blockquote,
+  Label,
 } from "@/components/ui/typography"
 
 const meta: Meta = {
@@ -102,36 +103,61 @@ export const BlockquoteStory: Story = {
   ),
 }
 
+// --- Label (JetBrains Mono) ---
+
+export const LabelStory: Story = {
+  name: "Label",
+  render: () => <Label>SECTION LABEL</Label>,
+}
+
 // --- Composed ---
 
+const allVariantsRender = () => (
+  <div className="space-y-6">
+    <Muted>
+      Resize the viewport or switch between the Mobile/Desktop stories —
+      typography scales at 768 px.
+    </Muted>
+    <H1>Heading 1 — Helvetica Now Display</H1>
+    <H2>Heading 2 — JetBrains Mono</H2>
+    <H3>Heading 3 — JetBrains Mono</H3>
+    <H4>Heading 4 — JetBrains Mono</H4>
+    <Lead>
+      Lead paragraph — Inter. A design system brings order to chaos.
+    </Lead>
+    <Paragraph>
+      Paragraph — Inter. Good typography is invisible. It creates a visual
+      hierarchy that guides the reader through content effortlessly. The right
+      typeface, size, and spacing can transform a wall of text into an engaging
+      reading experience.
+    </Paragraph>
+    <Paragraph>
+      Another paragraph with <InlineCode>inline code</InlineCode> in Geist Mono.
+    </Paragraph>
+    <Large>Large text — Helvetica Now Display</Large>
+    <Small>Small text — Helvetica Now Display</Small>
+    <Muted>Muted text — Inter</Muted>
+    <Blockquote>
+      Blockquote — Inter italic. Design is not just what it looks like.
+    </Blockquote>
+    <Label>MONO LABEL — JETBRAINS MONO</Label>
+  </div>
+)
+
 export const AllVariants: Story = {
-  render: () => (
-    <div className="space-y-6">
-      <H1>Heading 1 — Helvetica Now Display</H1>
-      <H2>Heading 2 — JetBrains Mono</H2>
-      <H3>Heading 3 — JetBrains Mono</H3>
-      <H4>Heading 4 — JetBrains Mono</H4>
-      <Lead>
-        Lead paragraph — Inter. A design system brings order to chaos.
-      </Lead>
-      <Paragraph>
-        Paragraph — Inter. Good typography is invisible. It creates a visual
-        hierarchy that guides the reader through content effortlessly. The right
-        typeface, size, and spacing can transform a wall of text into an engaging
-        reading experience.
-      </Paragraph>
-      <Paragraph>
-        Another paragraph with <InlineCode>inline code</InlineCode> in Geist
-        Mono.
-      </Paragraph>
-      <Large>Large text — Helvetica Now Display</Large>
-      <Small>Small text — Helvetica Now Display</Small>
-      <Muted>Muted text — Inter</Muted>
-      <Blockquote>
-        Blockquote — Inter italic. Design is not just what it looks like.
-      </Blockquote>
-    </div>
-  ),
+  render: allVariantsRender,
+}
+
+export const AllVariantsMobile: Story = {
+  name: "All Variants (Mobile 375)",
+  render: allVariantsRender,
+  globals: { viewport: { value: "mobile" } },
+}
+
+export const AllVariantsDesktop: Story = {
+  name: "All Variants (Desktop 1280)",
+  render: allVariantsRender,
+  globals: { viewport: { value: "desktop" } },
 }
 
 // --- Dark Mode ---
@@ -160,6 +186,7 @@ export const DarkMode: Story = {
       <Blockquote>
         Blockquote — Inter italic. Design is not just what it looks like.
       </Blockquote>
+      <Label>MONO LABEL — JETBRAINS MONO</Label>
     </div>
   ),
   decorators: [
