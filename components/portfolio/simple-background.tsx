@@ -77,9 +77,9 @@ const DEFAULTS: Required<Omit<SimpleBackgroundProps, "className" | "style">> = {
   color: "rgba(200,210,230,0.42)",
   background: "transparent",
 
-  waveLineSpacing: 18,
-  waveDotSpacing: 6,
-  waveDotSize: 0.9,
+  waveLineSpacing: 12,
+  waveDotSpacing: 4,
+  waveDotSize: 0.6,
   waveAmplitude: 18,
   waveLength: 640,
   waveSpeed: 0.07,

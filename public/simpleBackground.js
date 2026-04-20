@@ -53,9 +53,9 @@
 
     // ---- waves variant (artistic) ----
     waveLayers: 1,                     // single layer
-    waveLineSpacing: 18,               // vertical gap between lines
-    waveDotSpacing: 6,                 // horizontal gap between dots
-    waveDotSize: 0.9,                  // dot radius
+    waveLineSpacing: 12,               // vertical gap between lines
+    waveDotSpacing: 4,                 // horizontal gap between dots
+    waveDotSize: 0.6,                  // dot radius
     waveAmplitude: 18,                 // base amplitude (px)
     waveLength: 640,                   // base wavelength (px)
     waveSpeed: 0.07,                   // cycles/sec
@@ -131,9 +131,11 @@
       opts.maxDpr = Math.min(opts.maxDpr, opts.mobileMaxDpr);
       if (userOpts.idleDrift == null) opts.idleDrift = 0;
       if (userOpts.influenceRadius == null) opts.influenceRadius *= 0.9;
-      // lighten waves on mobile — aggressive spacing boost for dense layouts
-      if (userOpts.waveDotSpacing == null)  opts.waveDotSpacing = Math.max(8, Math.round(opts.waveDotSpacing * 1.8));
-      if (userOpts.waveLineSpacing == null) opts.waveLineSpacing = Math.max(18, Math.round(opts.waveLineSpacing * 1.6));
+      // Densify waves on mobile — smaller dots + tighter gaps read as more
+      // refined on small screens. Guarded so explicit props still win.
+      if (userOpts.waveDotSpacing == null)  opts.waveDotSpacing = Math.max(3, +(opts.waveDotSpacing * 0.75).toFixed(1));
+      if (userOpts.waveLineSpacing == null) opts.waveLineSpacing = Math.max(8, Math.round(opts.waveLineSpacing * 0.7));
+      if (userOpts.waveDotSize == null)     opts.waveDotSize = +(opts.waveDotSize * 0.8).toFixed(2);
       if (userOpts.waveCursorRadius == null) opts.waveCursorRadius = Math.min(opts.waveCursorRadius, 220);
     }
     // large-viewport density cap (keeps 4K displays bounded)
