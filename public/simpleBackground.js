@@ -53,9 +53,9 @@
 
     // ---- waves variant (artistic) ----
     waveLayers: 1,                     // single layer
-    waveLineSpacing: 12,               // vertical gap between lines
-    waveDotSpacing: 4,                 // horizontal gap between dots
-    waveDotSize: 0.6,                  // dot radius
+    waveLineSpacing: 12,               // vertical gap between lines (640–1800 band)
+    waveDotSpacing: 5,                 // horizontal gap between dots (640–1800 band)
+    waveDotSize: 0.7,                  // dot radius (640–1800 band)
     waveAmplitude: 18,                 // base amplitude (px)
     waveLength: 640,                   // base wavelength (px)
     waveSpeed: 0.07,                   // cycles/sec
@@ -131,17 +131,19 @@
       opts.maxDpr = Math.min(opts.maxDpr, opts.mobileMaxDpr);
       if (userOpts.idleDrift == null) opts.idleDrift = 0;
       if (userOpts.influenceRadius == null) opts.influenceRadius *= 0.9;
-      // Densify waves on mobile — smaller dots + tighter gaps read as more
-      // refined on small screens. Guarded so explicit props still win.
-      if (userOpts.waveDotSpacing == null)  opts.waveDotSpacing = Math.max(3, +(opts.waveDotSpacing * 0.75).toFixed(1));
-      if (userOpts.waveLineSpacing == null) opts.waveLineSpacing = Math.max(8, Math.round(opts.waveLineSpacing * 0.7));
-      if (userOpts.waveDotSize == null)     opts.waveDotSize = +(opts.waveDotSize * 0.8).toFixed(2);
+      // Mobile / touch band (< 640 or hover: none): fixed dense values.
+      // Guarded so explicit props still win.
+      if (userOpts.waveDotSpacing == null)  opts.waveDotSpacing = 3;
+      if (userOpts.waveLineSpacing == null) opts.waveLineSpacing = 8;
+      if (userOpts.waveDotSize == null)     opts.waveDotSize = 0.4;
       if (userOpts.waveCursorRadius == null) opts.waveCursorRadius = Math.min(opts.waveCursorRadius, 220);
     }
-    // large-viewport density cap (keeps 4K displays bounded)
+    // Large-viewport band (> 1800): fixed looser values to keep 4K displays bounded.
     const vw = typeof window !== 'undefined' ? window.innerWidth : 1440;
-    if (vw > 1800 && userOpts.waveDotSpacing == null) {
-      opts.waveDotSpacing = Math.round(opts.waveDotSpacing * 1.2);
+    if (vw > 1800 && !mobile) {
+      if (userOpts.waveDotSpacing == null)  opts.waveDotSpacing = 6;
+      if (userOpts.waveLineSpacing == null) opts.waveLineSpacing = 16;
+      if (userOpts.waveDotSize == null)     opts.waveDotSize = 0.8;
     }
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) {
