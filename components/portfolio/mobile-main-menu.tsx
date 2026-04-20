@@ -118,7 +118,13 @@ export function MobileMainMenu({
                   style={{
                     transitionDelay: isOpen ? `${index * 50 + 100}ms` : "0ms",
                   }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    if (item.onClick) {
+                      e.preventDefault()
+                      item.onClick()
+                    }
+                    setIsOpen(false)
+                  }}
                 >
                   <ArrowRight className="size-6 shrink-0 -translate-x-2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
                   <span>{item.label}</span>

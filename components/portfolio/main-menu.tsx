@@ -86,12 +86,12 @@ export function MainMenu({ items, className }: MainMenuProps) {
     <div
       ref={ref}
       className={cn(
-        "inline-flex items-center gap-8 rounded-lg border border-mainmenu-border bg-mainmenu-background px-3.5 py-2.5",
+        "inline-flex items-center gap-[100px] rounded-lg border border-mainmenu-border bg-mainmenu-background px-3.5 py-2.5",
         className,
       )}
     >
       <LogoLottie isDark={isDark} />
-      <div ref={itemsContainerRef} className="relative flex items-center">
+      <div ref={itemsContainerRef} className="relative flex items-center gap-[14px]">
         {/* Floating active indicator */}
         {indicator && activeIndex >= 0 && (
           <div
