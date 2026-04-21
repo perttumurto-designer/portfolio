@@ -158,6 +158,18 @@ const Label = React.forwardRef<
 ))
 Label.displayName = "Label"
 
+const MainMenuMobile = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<"span">
+>(({ className, ...props }, ref) => (
+  <span
+    ref={ref}
+    className={cn("menu-item-mobile", className)}
+    {...props}
+  />
+))
+MainMenuMobile.displayName = "MainMenuMobile"
+
 export {
   H1,
   H2,
@@ -171,4 +183,5 @@ export {
   InlineCode,
   Blockquote,
   Label,
+  MainMenuMobile,
 }

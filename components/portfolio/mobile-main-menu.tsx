@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { ArrowRight, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoLottie } from "@/components/portfolio/logo-lottie"
 import type { MenuItem } from "@/components/portfolio/main-menu"
@@ -64,7 +64,7 @@ export function MobileMainMenu({
       {/* Closed bar */}
       <div
         className={cn(
-          "flex w-full items-center justify-between p-5 transition-opacity duration-300",
+          "flex w-full items-center justify-between rounded-lg p-5 backdrop-blur-md transition-opacity duration-300",
           isOpen && "invisible opacity-0",
         )}
       >
@@ -81,14 +81,14 @@ export function MobileMainMenu({
       {/* Fullscreen overlay */}
       <div
         className={cn(
-          "dark fixed inset-0 z-50 bg-black/80 backdrop-blur-md transition-all duration-300",
+          "dark fixed inset-0 z-50 bg-background/60 backdrop-blur-md transition-all duration-300",
           isOpen ? "visible opacity-100" : "invisible opacity-0",
         )}
         onClick={() => setIsOpen(false)}
       >
         {isOpen && (
           <div
-            className="flex h-full flex-col p-[44px]"
+            className="flex h-full flex-col p-5"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -110,7 +110,7 @@ export function MobileMainMenu({
                   key={item.label}
                   href={item.href ?? "#"}
                   className={cn(
-                    "group flex items-center gap-2.5 rounded-lg p-2.5 font-heading text-[30px] font-medium leading-none tracking-[-0.6px] text-mainmenu-content transition-all duration-300",
+                    "flex w-full items-center rounded-lg p-2.5 menu-item-mobile text-mainmenu-content transition-all duration-300",
                     isOpen
                       ? "translate-y-0 opacity-100"
                       : "translate-y-4 opacity-0",
@@ -126,8 +126,7 @@ export function MobileMainMenu({
                     setIsOpen(false)
                   }}
                 >
-                  <ArrowRight className="size-6 shrink-0 -translate-x-2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
-                  <span>{item.label}</span>
+                  {item.label}
                 </a>
               ))}
             </nav>

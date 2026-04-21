@@ -12,7 +12,11 @@ const defaultItems = [
 const meta: Meta<typeof MobileMainMenu> = {
   title: "Portfolio/MobileMainMenu",
   component: MobileMainMenu,
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    viewport: { defaultViewport: "mobile" },
+  },
+  globals: { viewport: { value: "mobile" } },
   tags: ["autodocs"],
   argTypes: {
     defaultOpen: { control: "boolean" },

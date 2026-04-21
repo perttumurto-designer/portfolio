@@ -13,6 +13,7 @@ import {
   InlineCode,
   Blockquote,
   Label,
+  MainMenuMobile,
 } from "@/components/ui/typography"
 
 const meta: Meta = {
@@ -110,6 +111,20 @@ export const LabelStory: Story = {
   render: () => <Label>SECTION LABEL</Label>,
 }
 
+// --- MainMenuMobile (Helvetica Now Display — used in MobileMainMenu items) ---
+
+export const MainMenuMobileStory: Story = {
+  name: "MainMenuMobile",
+  render: () => (
+    <div className="flex flex-col gap-0.5">
+      <MainMenuMobile>Main</MainMenuMobile>
+      <MainMenuMobile>Selected works</MainMenuMobile>
+      <MainMenuMobile>About</MainMenuMobile>
+      <MainMenuMobile>History</MainMenuMobile>
+    </div>
+  ),
+}
+
 // --- Composed ---
 
 const allVariantsRender = () => (
@@ -141,6 +156,7 @@ const allVariantsRender = () => (
       Blockquote — Inter italic. Design is not just what it looks like.
     </Blockquote>
     <Label>MONO LABEL — JETBRAINS MONO</Label>
+    <MainMenuMobile>MainMenuMobile — Helvetica Now Display</MainMenuMobile>
   </div>
 )
 
@@ -187,6 +203,7 @@ export const DarkMode: Story = {
         Blockquote — Inter italic. Design is not just what it looks like.
       </Blockquote>
       <Label>MONO LABEL — JETBRAINS MONO</Label>
+      <MainMenuMobile>MainMenuMobile — Helvetica Now Display</MainMenuMobile>
     </div>
   ),
   decorators: [
