@@ -31,7 +31,7 @@ export function HeroSection() {
 
         {/* Clock row */}
         <div
-          className="relative z-10 w-max"
+          className="relative z-10 w-max max-sm:mt-[120px]"
           style={clockDrag.style}
           onPointerDown={clockDrag.onPointerDown}
         >
