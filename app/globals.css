@@ -37,7 +37,7 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --mainmenu-background: oklch(0.97 0 0);
+    --mainmenu-background: oklch(0.985 0 0);
     --mainmenu-background-hover: oklch(0.946 0 0);
     --mainmenu-content: oklch(0.205 0 0);
     --mainmenu-border: oklch(0.949 0 0);
@@ -75,10 +75,10 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-    --mainmenu-background: #0A0A0A;
+    --mainmenu-background: oklch(0.145 0 0);
     --mainmenu-background-hover: oklch(0.256 0 0);
     --mainmenu-content: oklch(0.931 0 0);
-    --mainmenu-border: #292929;
+    --mainmenu-border: oklch(0.281 0 0);
 }
 
 @theme inline {

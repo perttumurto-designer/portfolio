@@ -1,15 +1,27 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AnalogClock2 } from "@/components/portfolio/analog-clock-2"
 import SimpleBackground from "@/components/portfolio/simple-background"
 import { TextCard } from "@/components/portfolio/text-card"
 import { useDraggable } from "@/hooks/use-draggable"
+import { BREAKPOINTS } from "@/lib/breakpoints"
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const clockDrag = useDraggable({ containerRef })
   const cardDrag = useDraggable({ containerRef })
+  const [disableCardDrag, setDisableCardDrag] = useState(false)
+
+  useEffect(() => {
+    const mql = window.matchMedia(
+      `(max-width: ${BREAKPOINTS.sm - 1}px) and (pointer: coarse)`,
+    )
+    const update = () => setDisableCardDrag(mql.matches)
+    update()
+    mql.addEventListener("change", update)
+    return () => mql.removeEventListener("change", update)
+  }, [])
 
   return (
     <section
@@ -48,8 +60,8 @@ export function HeroSection() {
           </p>
           <div
             className="w-full md:max-w-[320px] md:flex-shrink-0"
-            style={cardDrag.style}
-            onPointerDown={cardDrag.onPointerDown}
+            style={disableCardDrag ? undefined : cardDrag.style}
+            onPointerDown={disableCardDrag ? undefined : cardDrag.onPointerDown}
           >
             <TextCard
               label="AI WAY OF DESIGNING"

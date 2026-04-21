@@ -22,8 +22,12 @@
 import { useEffect, useRef, type CSSProperties } from "react"
 import { useTheme } from "next-themes"
 
+// Kept as hex/rgba because simpleBackground.js' parseColor only accepts those formats.
+// oklch equivalents documented for design-system consistency:
+//   DARK_DOT_COLOR  ≈ oklch(0.862 0.030 264.407 / 0.42)
+//   LIGHT_DOT_COLOR ≈ oklch(0.796 0.018 256.296)
 const DARK_DOT_COLOR = "rgba(200,210,230,0.42)"
-const LIGHT_DOT_COLOR = "#C5CAD2"
+const LIGHT_DOT_COLOR = "#B5BDC8"
 
 type SimpleBackgroundProps = {
   variant?: "dots" | "lines" | "crosshairs" | "waves"
