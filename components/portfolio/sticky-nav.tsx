@@ -9,7 +9,7 @@ interface StickyNavProps {
 export function StickyNav({ items }: StickyNavProps) {
   return (
     <>
-      <div className="fixed inset-x-4 top-4 z-50 md:hidden">
+      <div className="fixed inset-x-6 top-6 z-50 md:hidden">
         <MobileMainMenu items={items} />
       </div>
       <div className="fixed left-1/2 top-[54px] z-50 hidden -translate-x-1/2 md:block">
