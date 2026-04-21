@@ -20,6 +20,10 @@
  */
 
 import { useEffect, useRef, type CSSProperties } from "react"
+import { useTheme } from "next-themes"
+
+const DARK_DOT_COLOR = "rgba(200,210,230,0.42)"
+const LIGHT_DOT_COLOR = "#C5CAD2"
 
 type SimpleBackgroundProps = {
   variant?: "dots" | "lines" | "crosshairs" | "waves"
@@ -74,7 +78,7 @@ declare global {
  */
 const DEFAULTS: Required<Omit<SimpleBackgroundProps, "className" | "style">> = {
   variant: "waves",
-  color: "rgba(200,210,230,0.42)",
+  color: DARK_DOT_COLOR,
   background: "transparent",
 
   waveLineSpacing: 12,
@@ -108,19 +112,27 @@ export default function SimpleBackground({
   ...props
 }: SimpleBackgroundProps) {
   const ref = useRef<HTMLDivElement | null>(null)
+  const instRef = useRef<{
+    update: (p: Record<string, unknown>) => void
+    destroy: () => void
+  } | null>(null)
+  const { resolvedTheme } = useTheme()
+
+  const themeColor =
+    props.color ?? (resolvedTheme === "light" ? LIGHT_DOT_COLOR : DARK_DOT_COLOR)
+
   // keep latest opts in a ref so hot-updates don't re-mount
-  const optsRef = useRef({ ...DEFAULTS, ...props })
-  optsRef.current = { ...DEFAULTS, ...props }
+  const optsRef = useRef({ ...DEFAULTS, ...props, color: themeColor })
+  optsRef.current = { ...DEFAULTS, ...props, color: themeColor }
 
   useEffect(() => {
     if (!ref.current) return
     let destroyed = false
-    let inst: { update: (p: Record<string, unknown>) => void; destroy: () => void } | null = null
 
     function tryMount() {
       if (destroyed) return
       if (window.SimpleBackground) {
-        inst = window.SimpleBackground.mount(ref.current!, optsRef.current)
+        instRef.current = window.SimpleBackground.mount(ref.current!, optsRef.current)
       } else {
         setTimeout(tryMount, 40)
       }
@@ -129,11 +141,16 @@ export default function SimpleBackground({
 
     return () => {
       destroyed = true
-      if (inst) inst.destroy()
+      if (instRef.current) instRef.current.destroy()
+      instRef.current = null
     }
     // mount once; change props via a ref if you need live updates
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    instRef.current?.update({ color: themeColor })
+  }, [themeColor])
 
   return (
     <div

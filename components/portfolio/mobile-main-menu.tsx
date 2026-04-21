@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoLottie } from "@/components/portfolio/logo-lottie"
 import type { MenuItem } from "@/components/portfolio/main-menu"
+import { ThemeToggle } from "@/components/portfolio/theme-toggle"
 
 interface MobileMainMenuProps {
   items: MenuItem[]
@@ -69,13 +70,16 @@ export function MobileMainMenu({
         )}
       >
         <LogoLottie isDark={isDark} />
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open menu"
-        >
-          <Menu className="size-6 text-mainmenu-content" />
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="size-6 text-mainmenu-content" />
+          </button>
+        </div>
       </div>
 
       {/* Fullscreen overlay */}
@@ -94,13 +98,16 @@ export function MobileMainMenu({
             {/* Header */}
             <div className="flex items-center justify-between">
               <LogoLottie isDark />
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close menu"
-              >
-                <X className="size-6 text-mainmenu-content" />
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <X className="size-6 text-mainmenu-content" />
+                </button>
+              </div>
             </div>
 
             {/* Menu items */}

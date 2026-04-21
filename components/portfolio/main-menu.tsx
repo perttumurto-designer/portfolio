@@ -11,6 +11,7 @@ import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoLottie } from "@/components/portfolio/logo-lottie"
 import { MainMenuItem } from "@/components/portfolio/main-menu-item"
+import { ThemeToggle } from "@/components/portfolio/theme-toggle"
 
 export interface MenuItem {
   label: string
@@ -91,29 +92,32 @@ export function MainMenu({ items, className }: MainMenuProps) {
       )}
     >
       <LogoLottie isDark={isDark} />
-      <div ref={itemsContainerRef} className="relative flex items-center gap-[14px]">
-        {/* Floating active indicator */}
-        {indicator && activeIndex >= 0 && (
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-y-0 rounded-4xl border border-mainmenu-content",
-              indicator.animate && "transition-all duration-300 ease-out",
-            )}
-            style={{ left: indicator.left, width: indicator.width }}
-          />
-        )}
-        {items.map((item, index) => (
-          <MainMenuItem
-            key={item.label}
-            ref={(el) => {
-              itemRefs.current[index] = el
-            }}
-            label={item.label}
-            icon={item.icon}
-            active={item.active}
-            onClick={item.onClick}
-          />
-        ))}
+      <div className="flex items-center gap-4">
+        <div ref={itemsContainerRef} className="relative flex items-center gap-[14px]">
+          {/* Floating active indicator */}
+          {indicator && activeIndex >= 0 && (
+            <div
+              className={cn(
+                "pointer-events-none absolute inset-y-0 rounded-4xl border border-mainmenu-content",
+                indicator.animate && "transition-all duration-300 ease-out",
+              )}
+              style={{ left: indicator.left, width: indicator.width }}
+            />
+          )}
+          {items.map((item, index) => (
+            <MainMenuItem
+              key={item.label}
+              ref={(el) => {
+                itemRefs.current[index] = el
+              }}
+              label={item.label}
+              icon={item.icon}
+              active={item.active}
+              onClick={item.onClick}
+            />
+          ))}
+        </div>
+        <ThemeToggle />
       </div>
     </div>
   )
