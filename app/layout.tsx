@@ -16,9 +16,18 @@ const fontMono = Geist_Mono({
 })
 
 const helveticaNowDisplay = localFont({
-  src: "../public/fonts/HelveticaNowDisplay-Regular.woff2",
-  weight: "400",
-  style: "normal",
+  src: [
+    { path: "../public/fonts/HelveticaNowDisplay-Hairline.woff2",  weight: "100", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Thin.woff2",      weight: "200", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-ExtLt.woff2",     weight: "250", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Light.woff2",     weight: "300", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Regular.woff2",   weight: "400", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Medium.woff2",    weight: "500", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Bold.woff2",      weight: "700", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-Black.woff2",     weight: "900", style: "normal" },
+    { path: "../public/fonts/HelveticaNowDisplay-ExtBlk.woff2",    weight: "950", style: "normal" },
+  ],
   variable: "--font-display",
   display: "swap",
 })
