@@ -1,32 +1,56 @@
 "use client"
 
 import { useState } from "react"
-import { ResponsiveMenu } from "@/components/portfolio/responsive-menu"
-import { AnalogClock2 } from "@/components/portfolio/analog-clock-2"
-import { House, Layers, Info, FileUser } from "lucide-react"
+import { FileUser, House, Info, Layers } from "lucide-react"
+import { HeroSection } from "@/components/portfolio/hero-section"
+import { StickyNav } from "@/components/portfolio/sticky-nav"
 
-const baseItems = [
-  { label: "Main", icon: House },
-  { label: "Selected works", icon: Layers },
-  { label: "About", icon: Info },
-  { label: "History", icon: FileUser },
-]
+const sections = [
+  { id: "main", label: "Main", icon: House },
+  { id: "selected-works", label: "Selected works", icon: Layers },
+  { id: "about", label: "About", icon: Info },
+  { id: "history", label: "History", icon: FileUser },
+] as const
 
 export default function Page() {
-  const [activeLabel, setActiveLabel] = useState(baseItems[0].label)
+  const [activeId, setActiveId] = useState<string>("main")
 
-  const menuItems = baseItems.map((item) => ({
-    ...item,
-    active: item.label === activeLabel,
-    onClick: () => setActiveLabel(item.label),
+  const items = sections.map((s) => ({
+    label: s.label,
+    icon: s.icon,
+    active: s.id === activeId,
+    onClick: () => {
+      setActiveId(s.id)
+      document
+        .getElementById(s.id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+    },
   }))
 
   return (
-    <div className="flex min-h-svh flex-col items-center px-5 pt-8 pb-5 md:px-6 md:pb-6">
-      <ResponsiveMenu items={menuItems} />
-      <div className="flex w-full flex-1 items-center justify-center">
-        <AnalogClock2 size={240} />
-      </div>
-    </div>
+    <>
+      <StickyNav items={items} />
+      <HeroSection />
+      <section
+        id="selected-works"
+        className="flex min-h-svh scroll-mt-24 items-center justify-center px-6"
+      >
+        <h2 className="text-heading-h1-mobile md:text-heading-h1">
+          Selected works
+        </h2>
+      </section>
+      <section
+        id="about"
+        className="flex min-h-svh scroll-mt-24 items-center justify-center px-6"
+      >
+        <h2 className="text-heading-h1-mobile md:text-heading-h1">About</h2>
+      </section>
+      <section
+        id="history"
+        className="flex min-h-svh scroll-mt-24 items-center justify-center px-6"
+      >
+        <h2 className="text-heading-h1-mobile md:text-heading-h1">History</h2>
+      </section>
+    </>
   )
 }

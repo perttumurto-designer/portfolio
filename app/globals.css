@@ -139,6 +139,7 @@
     }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
     }
 }
 
@@ -159,6 +160,14 @@
   font-size: 1.5rem;
   line-height: normal;
   letter-spacing: -0.03em;
+}
+
+@utility text-heading-h1-tablet {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: normal;
+  letter-spacing: -0.025em;
 }
 
 @utility text-heading-h2 {

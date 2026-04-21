@@ -88,7 +88,7 @@ export function MobileMainMenu({
       >
         {isOpen && (
           <div
-            className="flex h-full flex-col p-5"
+            className="flex h-full flex-col p-9"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
