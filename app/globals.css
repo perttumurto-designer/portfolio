@@ -75,10 +75,10 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-    --mainmenu-background: oklch(0.205 0 0);
+    --mainmenu-background: #0A0A0A;
     --mainmenu-background-hover: oklch(0.256 0 0);
     --mainmenu-content: oklch(0.931 0 0);
-    --mainmenu-border: #505050;
+    --mainmenu-border: #292929;
 }
 
 @theme inline {
