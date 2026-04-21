@@ -14,7 +14,7 @@ export function HeroSection() {
   return (
     <section
       id="main"
-      className="relative flex h-svh w-full items-stretch p-0 md:p-6"
+      className="relative flex min-h-dvh w-full items-stretch p-0 md:p-6"
     >
       <div
         ref={containerRef}
