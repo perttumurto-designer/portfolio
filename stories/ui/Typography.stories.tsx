@@ -43,7 +43,7 @@ export const Heading4: Story = {
   render: () => <H4>Font pairing</H4>,
 }
 
-// --- Body text (Large + Small: Helvetica Now Display; Paragraph/Lead/Muted/Blockquote: Inter) ---
+// --- Body text (Paragraph + Large + Small: Helvetica Now Display; Lead/Muted/Blockquote: Inter) ---
 
 export const ParagraphStory: Story = {
   name: "Paragraph",
@@ -141,10 +141,10 @@ const allVariantsRender = () => (
       Lead paragraph — Inter. A design system brings order to chaos.
     </Lead>
     <Paragraph>
-      Paragraph — Inter. Good typography is invisible. It creates a visual
-      hierarchy that guides the reader through content effortlessly. The right
-      typeface, size, and spacing can transform a wall of text into an engaging
-      reading experience.
+      Paragraph — Helvetica Now Display Medium. Good typography is invisible.
+      It creates a visual hierarchy that guides the reader through content
+      effortlessly. The right typeface, size, and spacing can transform a wall
+      of text into an engaging reading experience.
     </Paragraph>
     <Paragraph>
       Another paragraph with <InlineCode>inline code</InlineCode> in Geist Mono.
@@ -189,8 +189,9 @@ export const DarkMode: Story = {
         Lead paragraph — Inter. A design system brings order to chaos.
       </Lead>
       <Paragraph>
-        Paragraph — Inter. Good typography is invisible. It creates a visual
-        hierarchy that guides the reader through content effortlessly.
+        Paragraph — Helvetica Now Display Medium. Good typography is invisible.
+        It creates a visual hierarchy that guides the reader through content
+        effortlessly.
       </Paragraph>
       <Paragraph>
         Another paragraph with <InlineCode>inline code</InlineCode> in Geist

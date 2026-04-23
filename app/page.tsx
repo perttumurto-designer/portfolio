@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FileUser, House, Info, Layers } from "lucide-react"
 import { HeroSection } from "@/components/portfolio/hero-section"
+import { SelectedWorks } from "@/components/portfolio/selected-works"
 import { StickyNav } from "@/components/portfolio/sticky-nav"
 
 const sections = [
@@ -14,6 +15,33 @@ const sections = [
 
 export default function Page() {
   const [activeId, setActiveId] = useState<string>("main")
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" },
+    )
+
+    const observed: HTMLElement[] = []
+    for (const s of sections) {
+      const el = document.getElementById(s.id)
+      if (el) {
+        observer.observe(el)
+        observed.push(el)
+      }
+    }
+
+    return () => {
+      for (const el of observed) observer.unobserve(el)
+      observer.disconnect()
+    }
+  }, [])
 
   const items = sections.map((s) => ({
     label: s.label,
@@ -31,14 +59,7 @@ export default function Page() {
     <>
       <StickyNav items={items} />
       <HeroSection />
-      <section
-        id="selected-works"
-        className="flex min-h-svh scroll-mt-24 items-center justify-center px-6"
-      >
-        <h2 className="text-heading-h1-mobile md:text-heading-h1">
-          Selected works
-        </h2>
-      </section>
+      <SelectedWorks />
       <section
         id="about"
         className="flex min-h-svh scroll-mt-24 items-center justify-center px-6"

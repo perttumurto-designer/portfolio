@@ -41,6 +41,9 @@
     --mainmenu-background-hover: oklch(0.946 0 0);
     --mainmenu-content: oklch(0.205 0 0);
     --mainmenu-border: oklch(0.949 0 0);
+    --selectedworks-background: oklch(0.985 0 0);
+    --selectedworks-border: oklch(0.949 0 0);
+    --selectedworks-content: oklch(0.205 0 0);
 }
 
 .dark {
@@ -79,6 +82,9 @@
     --mainmenu-background-hover: oklch(0.256 0 0);
     --mainmenu-content: oklch(0.931 0 0);
     --mainmenu-border: oklch(0.281 0 0);
+    --selectedworks-background: oklch(0.260 0 0);
+    --selectedworks-border: oklch(0.341 0 0);
+    --selectedworks-content: oklch(0.907 0 0);
 }
 
 @theme inline {
@@ -121,6 +127,9 @@
     --color-mainmenu-background-hover: var(--mainmenu-background-hover);
     --color-mainmenu-content: var(--mainmenu-content);
     --color-mainmenu-border: var(--mainmenu-border);
+    --color-selectedworks-background: var(--selectedworks-background);
+    --color-selectedworks-border: var(--selectedworks-border);
+    --color-selectedworks-content: var(--selectedworks-content);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -228,18 +237,18 @@
 
 /* Body (font-sans = Inter) */
 @utility text-body-paragraph {
-  font-family: var(--font-sans);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
   font-size: 1rem;
-  line-height: 1.75rem;
+  line-height: 1.375rem;
   letter-spacing: 0;
 }
 
 @utility text-body-paragraph-mobile {
-  font-family: var(--font-sans);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: 1.375rem;
   letter-spacing: 0;
 }
 
@@ -392,4 +401,28 @@
   font-size: 0.6875rem;
   line-height: 0.75rem;
   letter-spacing: 0;
+}
+
+/* ── Selected Works scroll-pinned transitions ── */
+
+@keyframes selected-works-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes selected-works-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
