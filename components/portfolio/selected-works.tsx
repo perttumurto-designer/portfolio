@@ -25,6 +25,35 @@ interface HeroMediaProps {
   priority?: boolean
 }
 
+interface ClientLogoMaskProps {
+  src: string
+  alt: string
+}
+
+// Renders a monochrome SVG as a theme-aware silhouette. The SVG is used as a
+// mask and the colour is driven by `bg-selectedworks-content`, so the logo
+// inverts automatically when the theme flips — same way the text does.
+function ClientLogoMask({ src, alt }: ClientLogoMaskProps) {
+  const url = `url('${encodeURI(src)}')`
+  return (
+    <div
+      className="size-full bg-selectedworks-content"
+      role="img"
+      aria-label={alt}
+      style={{
+        WebkitMaskImage: url,
+        maskImage: url,
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskPosition: "center",
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+      }}
+    />
+  )
+}
+
 function HeroMedia({ src, alt, sizes, priority }: HeroMediaProps) {
   if (isVideoSrc(src)) {
     return (
@@ -201,14 +230,10 @@ export function SelectedWorks() {
           <p className="text-mono-label text-muted-foreground uppercase">
             {mobileProject.roles.join(" · ")}
           </p>
-          <div className="relative size-16">
-            <Image
+          <div className="size-16">
+            <ClientLogoMask
               src={mobileProject.clientLogo}
               alt={mobileProject.client}
-              fill
-              sizes="64px"
-              className="object-contain"
-              unoptimized
             />
           </div>
           <p className="text-body-paragraph text-selectedworks-content">
@@ -233,7 +258,7 @@ export function SelectedWorks() {
         className="relative hidden md:block"
         style={{ height: `${TRACK_VH * 100}vh` }}
       >
-        <div className="sticky top-0 flex h-svh items-stretch px-6 pb-6 pt-28 md:p-24">
+        <div className="sticky top-0 flex h-svh items-stretch px-6 pb-6 pt-28 md:p-24 md:pt-36">
           <div className="flex w-full items-start justify-center gap-1">
             {/* Left: InfoBox — text swaps at 60% threshold, then scroll snaps to 100% */}
             <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[620px] flex-[3_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
@@ -246,15 +271,11 @@ export function SelectedWorks() {
               <div className="flex flex-col gap-6">
                 <div
                   key={`logo-${textIndex}`}
-                  className="relative size-16 animate-[selected-works-fade-in_400ms_ease-out_both]"
+                  className="size-16 animate-[selected-works-fade-in_400ms_ease-out_both]"
                 >
-                  <Image
+                  <ClientLogoMask
                     src={activeProject.clientLogo}
                     alt={activeProject.client}
-                    fill
-                    sizes="64px"
-                    className="object-contain"
-                    unoptimized
                   />
                 </div>
                 <WordStagger

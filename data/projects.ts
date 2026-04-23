@@ -23,7 +23,7 @@ export const projects: readonly Project[] = [
     slug: "etuovi",
     title: "Etuovi",
     client: "Etuovi",
-    clientLogo: "/SelectedWorks/Case1/logo.svg",
+    clientLogo: "/SelectedWorks/Case1/Alma_Logo_Black 1.svg",
     roles: ["Lead Product Designer", "Design System Owner"],
     lead:
       "Etuovi.com mobile app — a user-experience-driven housing marketplace serving 900,000 weekly users. I led the UX and UI design, built the mobile component library, and owned the visual direction end to end.",
@@ -58,7 +58,7 @@ export const projects: readonly Project[] = [
     slug: "op",
     title: "OP",
     client: "OP",
-    clientLogo: "/SelectedWorks/Case4/logo.svg",
+    clientLogo: "/SelectedWorks/Case4/op-logo.svg",
     roles: ["Lead Designer", "Interaction Lead"],
     lead: "Product design work with OP.",
     description: "Case study description to follow.",
