@@ -36,8 +36,8 @@ export function AnalogClock({ size = 200, className }: AnalogClockProps) {
     const r = 65
     return {
       num,
-      x: 100 + r * Math.sin(angle),
-      y: 100 - r * Math.cos(angle),
+      x: Number((100 + r * Math.sin(angle)).toFixed(3)),
+      y: Number((100 - r * Math.cos(angle)).toFixed(3)),
     }
   })
 

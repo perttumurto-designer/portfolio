@@ -2,9 +2,14 @@
 
 import { Fragment, useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import { useTheme } from "next-themes"
 
-import { projects } from "@/data/projects"
+import { projects, type Project } from "@/data/projects"
 import { useIsMobile } from "@/hooks/use-is-mobile"
+
+function resolveHeroSrc(p: Project, theme: string | undefined): string {
+  return theme === "light" && p.heroImageLight ? p.heroImageLight : p.heroImage
+}
 
 const TEXT_SWAP_THRESHOLD = 0.8
 const SNAP_IDLE_MS = 20
@@ -13,6 +18,9 @@ const SNAP_COOLDOWN_MS = 900
 // Scroll buffer at the top of the pinned track where case 1 stays put before
 // any transition begins — expressed as a fraction of total track progress.
 const INTRO_DWELL = 0.12
+// Desktop sticky pins this far below the viewport top so the nav has clearance
+// and the title→cards gap stays at 32px. Matches pt-36 = 9rem.
+const STICKY_TOP_OFFSET_PX = 144
 const CASE_COUNT = projects.length
 const TRACK_VH = CASE_COUNT + 1
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
@@ -48,8 +56,8 @@ function ClientLogoMask({ src, alt }: ClientLogoMaskProps) {
         maskImage: url,
         WebkitMaskRepeat: "no-repeat",
         maskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-        maskPosition: "center",
+        WebkitMaskPosition: "left center",
+        maskPosition: "left center",
         WebkitMaskSize: "contain",
         maskSize: "contain",
       }}
@@ -86,6 +94,7 @@ function HeroMedia({ src, alt, sizes, priority }: HeroMediaProps) {
 
 export function SelectedWorks() {
   const isMobile = useIsMobile()
+  const { resolvedTheme } = useTheme()
   const trackRef = useRef<HTMLDivElement>(null)
   const [progress, setProgress] = useState(0)
 
@@ -110,9 +119,15 @@ export function SelectedWorks() {
     const readProgress = () => {
       const rect = track.getBoundingClientRect()
       const vh = window.innerHeight
-      const range = track.offsetHeight - vh
+      // Sticky pins at top = STICKY_TOP_OFFSET_PX, so the pinned-scroll window
+      // spans rect.top values from +STICKY_TOP_OFFSET_PX (pin start) down to
+      // -(trackHeight - vh + STICKY_TOP_OFFSET_PX) + STICKY_TOP_OFFSET_PX (pin end).
+      const range = track.offsetHeight + STICKY_TOP_OFFSET_PX - vh
       if (range <= 0) return null
-      const p = Math.max(0, Math.min(1, -rect.top / range))
+      const p = Math.max(
+        0,
+        Math.min(1, (STICKY_TOP_OFFSET_PX - rect.top) / range),
+      )
       return { p, rect, range }
     }
 
@@ -156,19 +171,28 @@ export function SelectedWorks() {
 
     const maybeSnap = () => {
       if (performance.now() < snapCooldownUntil) return
-      if (!lastForward) return
       const info = readProgress()
       if (!info) return
       const { p, rect, range } = info
       const effP = Math.max(0, (p - INTRO_DWELL) / (1 - INTRO_DWELL))
       const segment = Math.floor(effP * CASE_COUNT)
-      if (segment < 0 || segment >= CASE_COUNT - 1) return
       const local = effP * CASE_COUNT - segment
-      if (local < TEXT_SWAP_THRESHOLD || local >= 1) return
+
+      let targetEffP: number | null = null
+      if (lastForward) {
+        if (segment < 0 || segment >= CASE_COUNT - 1) return
+        if (local < TEXT_SWAP_THRESHOLD || local >= 1) return
+        targetEffP = (segment + 1) / CASE_COUNT
+      } else {
+        if (segment < 0 || segment >= CASE_COUNT) return
+        if (local <= 0 || local > 1 - TEXT_SWAP_THRESHOLD) return
+        targetEffP = segment / CASE_COUNT
+      }
+
       const sectionAbsTop = rect.top + window.scrollY
-      const targetEffP = (segment + 1) / CASE_COUNT
       const targetP = INTRO_DWELL + targetEffP * (1 - INTRO_DWELL)
-      const targetScrollY = sectionAbsTop + targetP * range
+      const targetScrollY =
+        sectionAbsTop - STICKY_TOP_OFFSET_PX + targetP * range
       snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS
       animateScrollTo(targetScrollY, SNAP_DURATION_MS)
     }
@@ -235,16 +259,24 @@ export function SelectedWorks() {
     <section id="selected-works" className="scroll-mt-24">
       {/* Mobile: minimal stacked holding pattern */}
       <div className="flex min-h-svh w-full flex-col gap-4 px-6 pb-6 pt-28 md:hidden">
+        <h2 className="text-heading-h2-mobile mb-4 text-center text-mainmenu-content">
+          Few selected works
+        </h2>
         <div className="flex flex-col gap-6 rounded-lg border border-selectedworks-border bg-selectedworks-background p-6">
           <p className="text-mono-label text-muted-foreground uppercase">
             {mobileProject.roles.join(" · ")}
           </p>
-          <div className="size-16">
-            <ClientLogoMask
-              src={mobileProject.clientLogo}
-              alt={mobileProject.client}
-            />
-          </div>
+          {mobileProject.clientLogo && (
+            <div
+              className="h-16"
+              style={{ width: `${mobileProject.clientLogoWidth ?? 64}px` }}
+            >
+              <ClientLogoMask
+                src={mobileProject.clientLogo}
+                alt={mobileProject.client}
+              />
+            </div>
+          )}
           <p className="text-body-paragraph text-selectedworks-content">
             {mobileProject.lead}
           </p>
@@ -254,7 +286,7 @@ export function SelectedWorks() {
         </div>
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-mainmenu-border">
           <HeroMedia
-            src={mobileProject.heroImage}
+            src={resolveHeroSrc(mobileProject, resolvedTheme)}
             alt={mobileProject.title}
             sizes="100vw"
           />
@@ -267,10 +299,13 @@ export function SelectedWorks() {
         className="relative hidden md:block"
         style={{ height: `${TRACK_VH * 100}vh` }}
       >
-        <div className="sticky top-0 flex h-svh items-stretch px-6 pb-6 pt-28 md:p-24 md:pt-36">
-          <div className="flex w-full items-start justify-center gap-1">
+        <div className="sticky top-[144px] flex h-[calc(100svh-144px)] flex-col gap-8 px-6 pb-6">
+          <h2 className="text-heading-h2 text-center text-mainmenu-content">
+            Few selected works
+          </h2>
+          <div className="flex w-full min-h-0 flex-1 items-start justify-center gap-1">
             {/* Left: InfoBox — text swaps at 60% threshold, then scroll snaps to 100% */}
-            <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[620px] flex-[3_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
+            <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[620px] flex-[2_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
               <WordStagger
                 key={`role-${textIndex}`}
                 text={activeProject.roles.join(" · ")}
@@ -280,12 +315,17 @@ export function SelectedWorks() {
               <div className="flex flex-col gap-6">
                 <div
                   key={`logo-${textIndex}`}
-                  className="size-16 animate-[selected-works-fade-in_400ms_ease-out_both]"
+                  className="h-16 animate-[selected-works-fade-in_400ms_ease-out_both]"
+                  style={{
+                    width: `${activeProject.clientLogoWidth ?? 64}px`,
+                  }}
                 >
-                  <ClientLogoMask
-                    src={activeProject.clientLogo}
-                    alt={activeProject.client}
-                  />
+                  {activeProject.clientLogo && (
+                    <ClientLogoMask
+                      src={activeProject.clientLogo}
+                      alt={activeProject.client}
+                    />
+                  )}
                 </div>
                 <WordStagger
                   key={`lead-${textIndex}`}
@@ -307,7 +347,7 @@ export function SelectedWorks() {
             </div>
 
             {/* Right: MediaContainer — cases slide up as progress advances */}
-            <div className="relative h-full min-w-[200px] max-w-[1100px] flex-[2_1_0%] overflow-hidden rounded-xl rounded-tl-none border border-mainmenu-border">
+            <div className="relative h-full min-w-[200px] max-w-[1100px] flex-[3_1_0%] overflow-hidden rounded-xl rounded-tl-none border border-mainmenu-border">
               {projects.map((p, i) => {
                 const offsetPct = (i - scaledImage) * 100
                 return (
@@ -320,7 +360,7 @@ export function SelectedWorks() {
                     aria-hidden={i !== textIndex}
                   >
                     <HeroMedia
-                      src={p.heroImage}
+                      src={resolveHeroSrc(p, resolvedTheme)}
                       alt={p.title}
                       sizes="(min-width: 1280px) 70vw, (min-width: 768px) 65vw, 0px"
                       priority={i === 0}

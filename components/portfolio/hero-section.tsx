@@ -47,7 +47,7 @@ export function HeroSection() {
           style={clockDrag.style}
           onPointerDown={clockDrag.onPointerDown}
         >
-          <AnalogClock2 size={140} className="lg:size-[160px]" />
+          <AnalogClock2 size={140} className="lg:size-[200px]" />
         </div>
 
         {/* Intro + TextCard row — stacked on mobile, side-by-side md+ */}
