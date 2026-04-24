@@ -305,7 +305,7 @@ export function SelectedWorks() {
           </h2>
           <div className="flex w-full min-h-0 flex-1 items-start gap-1 pl-6">
             {/* Left: InfoBox — text swaps at 60% threshold, then scroll snaps to 100% */}
-            <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[620px] flex-[2_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
+            <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[500px] flex-[2_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
               <WordStagger
                 key={`role-${textIndex}`}
                 text={activeProject.roles.join(" · ")}
