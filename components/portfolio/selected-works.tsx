@@ -299,11 +299,11 @@ export function SelectedWorks() {
         className="relative hidden md:block"
         style={{ height: `${TRACK_VH * 100}vh` }}
       >
-        <div className="sticky top-[144px] flex h-[calc(100svh-144px)] flex-col gap-8 px-6 pb-6">
-          <h2 className="text-heading-h2 text-center text-mainmenu-content">
+        <div className="sticky top-[144px] flex h-[calc(100svh-144px)] flex-col gap-8">
+          <h2 className="text-heading-h2 px-6 text-center text-mainmenu-content">
             Few selected works
           </h2>
-          <div className="flex w-full min-h-0 flex-1 items-start justify-center gap-1">
+          <div className="flex w-full min-h-0 flex-1 items-start gap-1 pl-6">
             {/* Left: InfoBox — text swaps at 60% threshold, then scroll snaps to 100% */}
             <div className="flex h-full max-h-[640px] min-w-[200px] max-w-[620px] flex-[2_1_0%] flex-col justify-between overflow-hidden rounded-lg rounded-tr-none border border-selectedworks-border bg-selectedworks-background p-8">
               <WordStagger
@@ -347,7 +347,7 @@ export function SelectedWorks() {
             </div>
 
             {/* Right: MediaContainer — cases slide up as progress advances */}
-            <div className="relative h-full min-w-[200px] max-w-[1100px] flex-[3_1_0%] overflow-hidden rounded-xl rounded-tl-none border border-mainmenu-border">
+            <div className="relative h-full min-w-[200px] flex-[3_1_0%] overflow-hidden border border-mainmenu-border">
               {projects.map((p, i) => {
                 const offsetPct = (i - scaledImage) * 100
                 return (
