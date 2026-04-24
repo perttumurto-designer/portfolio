@@ -10,6 +10,9 @@ const TEXT_SWAP_THRESHOLD = 0.8
 const SNAP_IDLE_MS = 20
 const SNAP_DURATION_MS = 400
 const SNAP_COOLDOWN_MS = 900
+// Scroll buffer at the top of the pinned track where case 1 stays put before
+// any transition begins — expressed as a fraction of total track progress.
+const INTRO_DWELL = 0.12
 const CASE_COUNT = projects.length
 const TRACK_VH = CASE_COUNT + 1
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
@@ -157,13 +160,15 @@ export function SelectedWorks() {
       const info = readProgress()
       if (!info) return
       const { p, rect, range } = info
-      const segment = Math.floor(p * CASE_COUNT)
+      const effP = Math.max(0, (p - INTRO_DWELL) / (1 - INTRO_DWELL))
+      const segment = Math.floor(effP * CASE_COUNT)
       if (segment < 0 || segment >= CASE_COUNT - 1) return
-      const local = p * CASE_COUNT - segment
+      const local = effP * CASE_COUNT - segment
       if (local < TEXT_SWAP_THRESHOLD || local >= 1) return
       const sectionAbsTop = rect.top + window.scrollY
-      const targetScrollY =
-        sectionAbsTop + ((segment + 1) / CASE_COUNT) * range
+      const targetEffP = (segment + 1) / CASE_COUNT
+      const targetP = INTRO_DWELL + targetEffP * (1 - INTRO_DWELL)
+      const targetScrollY = sectionAbsTop + targetP * range
       snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS
       animateScrollTo(targetScrollY, SNAP_DURATION_MS)
     }
@@ -208,15 +213,19 @@ export function SelectedWorks() {
     }
   }, [isMobile])
 
+  const effectiveProgress = Math.max(
+    0,
+    (progress - INTRO_DWELL) / (1 - INTRO_DWELL),
+  )
   const scaledImage = Math.max(
     0,
-    Math.min(CASE_COUNT - 1, progress * CASE_COUNT),
+    Math.min(CASE_COUNT - 1, effectiveProgress * CASE_COUNT),
   )
   const textIndex = Math.max(
     0,
     Math.min(
       CASE_COUNT - 1,
-      Math.floor(progress * CASE_COUNT + (1 - TEXT_SWAP_THRESHOLD)),
+      Math.floor(effectiveProgress * CASE_COUNT + (1 - TEXT_SWAP_THRESHOLD)),
     ),
   )
   const activeProject = projects[textIndex]
