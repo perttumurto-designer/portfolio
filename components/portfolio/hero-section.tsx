@@ -11,6 +11,7 @@ export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const clockDrag = useDraggable({ containerRef })
   const cardDrag = useDraggable({ containerRef })
+  const cardDrag2 = useDraggable({ containerRef })
   const [disableCardDrag, setDisableCardDrag] = useState(false)
 
   useEffect(() => {
@@ -58,17 +59,35 @@ export function HeroSection() {
             while collaborating closely with teams to align design with business
             goals. Using and utilizing AI when it is necessary and useful.
           </p>
-          <div
-            className="w-full md:max-w-[320px] md:flex-shrink-0"
-            style={disableCardDrag ? undefined : cardDrag.style}
-            onPointerDown={disableCardDrag ? undefined : cardDrag.onPointerDown}
-          >
-            <TextCard
-              label="AI WAY OF DESIGNING"
-              heading="2,000% Faster"
-              lead="When we're moving faster than ever, direction matters more than ever."
-              body="Design has never been more valuable. When everyone can build everything, the best and most meaningful experience wins. If your product doesn't feel right, someone else can ship a better one by tomorrow. Ideas aren't valuable. Execution is."
-            />
+          <div className="flex w-full flex-col gap-[10px] md:max-w-[320px] md:flex-shrink-0 xl:w-auto xl:max-w-none xl:flex-row">
+            <div
+              className="w-full md:max-w-[320px]"
+              style={disableCardDrag ? undefined : cardDrag.style}
+              onPointerDown={
+                disableCardDrag ? undefined : cardDrag.onPointerDown
+              }
+            >
+              <TextCard
+                label="AI WAY OF DESIGNING"
+                heading="2,000% Faster"
+                lead="When we're moving faster than ever, direction matters more than ever."
+                body="Design has never been more valuable. When everyone can build everything, the best and most meaningful experience wins. If your product doesn't feel right, someone else can ship a better one by tomorrow. Ideas aren't valuable. Execution is."
+              />
+            </div>
+            <div
+              className="w-full md:max-w-[320px]"
+              style={disableCardDrag ? undefined : cardDrag2.style}
+              onPointerDown={
+                disableCardDrag ? undefined : cardDrag2.onPointerDown
+              }
+            >
+              <TextCard
+                label="AI WAY OF DESIGNING"
+                heading="Smaller, tighter teams"
+                lead="AI made teams smaller. It didn't make the designer's role smaller."
+                body="The work that lands still comes from people sparring, arguing and building together, and someone has to hold that room. AI tools cover the ground that used to need extra hands, so teams can be leaner without losing pace. The designer's job is to pull the right thinking out of stakeholders, teams and tools, and turn it into a direction worth executing. That part doesn't come out of a prompt."
+              />
+            </div>
           </div>
         </div>
       </div>

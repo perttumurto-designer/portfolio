@@ -12,7 +12,7 @@ function resolveHeroSrc(p: Project, theme: string | undefined): string {
 }
 
 const TEXT_SWAP_THRESHOLD = 0.8
-const SNAP_IDLE_MS = 20
+const SNAP_IDLE_MS = 120
 const SNAP_DURATION_MS = 400
 const SNAP_COOLDOWN_MS = 900
 // Scroll buffer at the top of the pinned track where case 1 stays put before
@@ -145,7 +145,8 @@ export function SelectedWorks() {
       }
     }
 
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 
     const animateScrollTo = (targetY: number, duration: number) => {
       cancelAnimation()
@@ -157,7 +158,7 @@ export function SelectedWorks() {
         const elapsed = performance.now() - startTime
         const t = Math.min(1, elapsed / duration)
         window.scrollTo({
-          top: startY + distance * easeOutCubic(t),
+          top: startY + distance * easeInOutCubic(t),
           behavior: "instant",
         })
         if (t < 1) {
@@ -170,22 +171,35 @@ export function SelectedWorks() {
     }
 
     const maybeSnap = () => {
-      if (performance.now() < snapCooldownUntil) return
+      const now = performance.now()
+      if (now < snapCooldownUntil) {
+        // Re-arm at cooldown end so the current idle position still resolves.
+        if (snapTimer !== null) window.clearTimeout(snapTimer)
+        snapTimer = window.setTimeout(() => {
+          snapTimer = null
+          maybeSnap()
+        }, snapCooldownUntil - now + 10)
+        return
+      }
+
       const info = readProgress()
       if (!info) return
       const { p, rect, range } = info
       const effP = Math.max(0, (p - INTRO_DWELL) / (1 - INTRO_DWELL))
-      const segment = Math.floor(effP * CASE_COUNT)
+      const segment = Math.min(
+        CASE_COUNT - 1,
+        Math.max(0, Math.floor(effP * CASE_COUNT)),
+      )
       const local = effP * CASE_COUNT - segment
 
-      let targetEffP: number | null = null
+      const EPSILON = 0.005
+      if (local <= EPSILON) return
+
+      let targetEffP: number
       if (lastForward) {
-        if (segment < 0 || segment >= CASE_COUNT - 1) return
-        if (local < TEXT_SWAP_THRESHOLD || local >= 1) return
+        if (segment >= CASE_COUNT - 1) return
         targetEffP = (segment + 1) / CASE_COUNT
       } else {
-        if (segment < 0 || segment >= CASE_COUNT) return
-        if (local <= 0 || local > 1 - TEXT_SWAP_THRESHOLD) return
         targetEffP = segment / CASE_COUNT
       }
 
@@ -193,7 +207,7 @@ export function SelectedWorks() {
       const targetP = INTRO_DWELL + targetEffP * (1 - INTRO_DWELL)
       const targetScrollY =
         sectionAbsTop - STICKY_TOP_OFFSET_PX + targetP * range
-      snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS
+      snapCooldownUntil = now + SNAP_COOLDOWN_MS
       animateScrollTo(targetScrollY, SNAP_DURATION_MS)
     }
 
