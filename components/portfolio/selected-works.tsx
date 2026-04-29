@@ -23,7 +23,7 @@ const INTRO_DWELL = 0.12
 const STICKY_TOP_OFFSET_PX = 144
 const CASE_COUNT = projects.length
 const TRACK_VH = CASE_COUNT + 1
-const MOBILE_TRACK_VH = CASE_COUNT + 0.5
+const MOBILE_TRACK_VH = CASE_COUNT + 1
 const STICKY_TOP_OFFSET_MOBILE_PX = 80
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
 
@@ -94,66 +94,52 @@ function HeroMedia({ src, alt, sizes, priority }: HeroMediaProps) {
   )
 }
 
-interface CaseRowProps {
+interface MobileWorkCardProps {
   project: Project
-  basis: number
-  grow: number
-  expansion: number
-  hidden?: boolean
+  priority?: boolean
+  chip?: string
 }
 
-// Continuous-fold card. `expansion` ∈ [0, 1] drives image min-height and content
-// opacity; `basis`/`grow` drive the flex height. Card always renders the full
-// content tree; overflow:hidden on the outer + min-h-0 on the InfoBox let the
-// label collapse to 59px while the content fades and clips smoothly.
-function CaseRow({ project, basis, grow, expansion, hidden }: CaseRowProps) {
+// Full-viewport mobile card. Always renders complete content; the parent's
+// position:sticky drives the slide-up cover transition between works.
+function MobileWorkCard({ project, priority, chip }: MobileWorkCardProps) {
   const { resolvedTheme } = useTheme()
   return (
-    <div
-      style={{
-        flexBasis: `${basis}px`,
-        flexGrow: grow,
-        flexShrink: 0,
-        display: hidden ? "none" : "flex",
-      }}
-      className="-mb-[6px] w-full flex-col overflow-hidden"
-    >
-      <div
-        className="relative flex-1 overflow-hidden rounded-t-[14px] border border-mainmenu-border"
-        style={{ minHeight: `${expansion * 80}px` }}
-      >
+    <div className="flex h-full flex-col overflow-hidden rounded-[14px] border border-mainmenu-border">
+      <div className="relative w-full shrink-0" style={{ aspectRatio: "4 / 3" }}>
         <HeroMedia
           src={resolveHeroSrc(project, resolvedTheme)}
           alt={project.title}
           sizes="100vw"
+          priority={priority}
         />
+        {chip && (
+          <span className="absolute right-3 top-3 z-10 rounded-full bg-background/70 px-2.5 py-1 text-mono-label tabular-nums text-mainmenu-content backdrop-blur">
+            {chip}
+          </span>
+        )}
       </div>
-      <div className="flex shrink-0 flex-col gap-4 rounded-b-[14px] border border-selectedworks-border bg-selectedworks-background p-5">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto border-t border-selectedworks-border bg-selectedworks-background p-5">
         <p className="text-mono-label uppercase text-muted-foreground">
           {project.roles.join(" · ")}
         </p>
-        <div
-          className="flex flex-col gap-4"
-          style={{ opacity: expansion }}
-        >
-          {project.clientLogo && (
-            <div
-              className="h-16"
-              style={{ width: `${project.clientLogoWidth ?? 64}px` }}
-            >
-              <ClientLogoMask
-                src={project.clientLogo}
-                alt={project.client}
-              />
-            </div>
-          )}
-          <p className="text-body-paragraph text-selectedworks-content">
-            {project.lead}
-          </p>
-          <p className="text-body-small text-selectedworks-content">
-            {project.description}
-          </p>
-        </div>
+        {project.clientLogo && (
+          <div
+            className="h-14 shrink-0"
+            style={{ width: `${project.clientLogoWidth ?? 56}px` }}
+          >
+            <ClientLogoMask
+              src={project.clientLogo}
+              alt={project.client}
+            />
+          </div>
+        )}
+        <p className="text-body-paragraph text-selectedworks-content">
+          {project.lead}
+        </p>
+        <p className="text-body-small text-selectedworks-content">
+          {project.description}
+        </p>
       </div>
     </div>
   )
@@ -163,11 +149,12 @@ export function SelectedWorks() {
   const isMobile = useIsMobile()
   const { resolvedTheme } = useTheme()
   const desktopTrackRef = useRef<HTMLDivElement>(null)
-  const mobileTrackRef = useRef<HTMLDivElement>(null)
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const track = isMobile ? mobileTrackRef.current : desktopTrackRef.current
+    // Mobile relies entirely on CSS position:sticky for the slide-up cover.
+    if (isMobile) return
+    const track = desktopTrackRef.current
     if (!track) return
 
     let rafId = 0
@@ -180,21 +167,17 @@ export function SelectedWorks() {
 
     const WHEEL_CANCEL_GRACE_MS = 300
 
-    // On mobile the sticky offset is smaller (no second-level nav clearance).
-    const stickyOffset = isMobile
-      ? STICKY_TOP_OFFSET_MOBILE_PX
-      : STICKY_TOP_OFFSET_PX
-
     const readProgress = () => {
       const rect = track.getBoundingClientRect()
       const vh = window.innerHeight
-      // Pin-window spans rect.top from +stickyOffset (pin start) down to
-      // stickyOffset - (trackHeight - vh) (pin end).
-      const range = track.offsetHeight + stickyOffset - vh
+      // Sticky pins at top = STICKY_TOP_OFFSET_PX, so the pinned-scroll window
+      // spans rect.top values from +STICKY_TOP_OFFSET_PX (pin start) down to
+      // -(trackHeight - vh + STICKY_TOP_OFFSET_PX) + STICKY_TOP_OFFSET_PX (pin end).
+      const range = track.offsetHeight + STICKY_TOP_OFFSET_PX - vh
       if (range <= 0) return null
       const p = Math.max(
         0,
-        Math.min(1, (stickyOffset - rect.top) / range),
+        Math.min(1, (STICKY_TOP_OFFSET_PX - rect.top) / range),
       )
       return { p, rect, range }
     }
@@ -274,7 +257,7 @@ export function SelectedWorks() {
       const sectionAbsTop = rect.top + window.scrollY
       const targetP = INTRO_DWELL + targetEffP * (1 - INTRO_DWELL)
       const targetScrollY =
-        sectionAbsTop - stickyOffset + targetP * range
+        sectionAbsTop - STICKY_TOP_OFFSET_PX + targetP * range
       snapCooldownUntil = now + SNAP_COOLDOWN_MS
       animateScrollTo(targetScrollY, SNAP_DURATION_MS)
     }
@@ -285,8 +268,6 @@ export function SelectedWorks() {
       prevY = currentY
 
       if (rafId === 0) rafId = requestAnimationFrame(update)
-
-      if (isMobile) return
 
       if (snapTimer !== null) window.clearTimeout(snapTimer)
       snapTimer = window.setTimeout(() => {
@@ -305,12 +286,9 @@ export function SelectedWorks() {
     update()
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll)
-
-    if (!isMobile) {
-      window.addEventListener("wheel", onWheelIntent, { passive: true })
-      window.addEventListener("touchstart", onUserIntent, { passive: true })
-      window.addEventListener("keydown", onUserIntent)
-    }
+    window.addEventListener("wheel", onWheelIntent, { passive: true })
+    window.addEventListener("touchstart", onUserIntent, { passive: true })
+    window.addEventListener("keydown", onUserIntent)
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
@@ -318,11 +296,9 @@ export function SelectedWorks() {
       cancelAnimation()
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
-      if (!isMobile) {
-        window.removeEventListener("wheel", onWheelIntent)
-        window.removeEventListener("touchstart", onUserIntent)
-        window.removeEventListener("keydown", onUserIntent)
-      }
+      window.removeEventListener("wheel", onWheelIntent)
+      window.removeEventListener("touchstart", onUserIntent)
+      window.removeEventListener("keydown", onUserIntent)
     }
   }, [isMobile])
 
@@ -343,57 +319,36 @@ export function SelectedWorks() {
   )
   const activeProject = projects[textIndex]
 
-  // Continuous-fold state for the mobile track. cardP ∈ [0, N-1] places the
-  // active fold between case `transitionIndex` (shrinking) and case
-  // `transitionIndex + 1` (growing); `frac` is the position within that fold.
-  const cardP = progress * Math.max(1, CASE_COUNT - 1)
-  const transitionIndex = Math.min(
-    Math.max(0, CASE_COUNT - 2),
-    Math.max(0, Math.floor(cardP)),
-  )
-  const frac = Math.max(0, Math.min(1, cardP - transitionIndex))
-
-  const getCardState = (i: number): Omit<CaseRowProps, "project"> => {
-    if (CASE_COUNT === 1) {
-      return { basis: 59, grow: 1, expansion: 1 }
-    }
-    if (i < transitionIndex) {
-      return { basis: 59, grow: 0, expansion: 0 }
-    }
-    if (i === transitionIndex) {
-      return { basis: 59, grow: 1 - frac, expansion: 1 - frac }
-    }
-    if (i === transitionIndex + 1) {
-      return { basis: 0, grow: frac, expansion: frac }
-    }
-    return { basis: 0, grow: 0, expansion: 0, hidden: true }
-  }
-
   return (
     <section id="selected-works" className="scroll-mt-24">
-      {/* Mobile: pinned stacked-pile track */}
+      {/* Mobile: sticky-cover full-screen cards. CSS-only — each card pins
+          at top:STICKY_TOP_OFFSET_MOBILE_PX and the next sibling (higher
+          z-index) slides up to cover it as the user scrolls. */}
       <div
-        ref={mobileTrackRef}
         className="relative md:hidden"
         style={{ height: `${MOBILE_TRACK_VH * 100}vh` }}
       >
-        <div
-          className="flex flex-col gap-4 px-6 pt-4"
-          style={{
-            position: "sticky",
-            top: `${STICKY_TOP_OFFSET_MOBILE_PX}px`,
-            height: `calc(100svh - ${STICKY_TOP_OFFSET_MOBILE_PX}px)`,
-          }}
-        >
-          <h2 className="text-heading-h2-mobile mb-2 text-center text-mainmenu-content">
-            Few selected works
-          </h2>
-          <div className="flex min-h-0 flex-1 flex-col gap-[5px] pb-[6px]">
-            {projects.map((p, i) => (
-              <CaseRow key={p.slug} project={p} {...getCardState(i)} />
-            ))}
+        <h2 className="text-heading-h2-mobile px-6 pb-3 pt-4 text-center text-mainmenu-content">
+          Few selected works
+        </h2>
+        {projects.map((p, i) => (
+          <div
+            key={p.slug}
+            className="bg-background px-4 pb-4"
+            style={{
+              position: "sticky",
+              top: `${STICKY_TOP_OFFSET_MOBILE_PX}px`,
+              height: `calc(100svh - ${STICKY_TOP_OFFSET_MOBILE_PX}px)`,
+              zIndex: i + 1,
+            }}
+          >
+            <MobileWorkCard
+              project={p}
+              priority={i < 2}
+              chip={`${String(i + 1).padStart(2, "0")} / ${String(CASE_COUNT).padStart(2, "0")}`}
+            />
           </div>
-        </div>
+        ))}
       </div>
 
       {/* Desktop: scroll-pinned track */}
