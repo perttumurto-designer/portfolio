@@ -26,7 +26,7 @@ export const projects: readonly Project[] = [
     title: "Etuovi",
     client: "Etuovi",
     clientLogo: "/SelectedWorks/Case1/Alma_Logo_Black 1.svg",
-    roles: ["Lead Product Designer", "Design System Owner"],
+    roles: ["Lead Product Designer"],
     lead:
       "Etuovi.com mobile app — a user-experience-driven housing marketplace serving 900,000 weekly users. I led the UX and UI design, built the mobile component library, and owned the visual direction end to end.",
     description:
@@ -53,9 +53,11 @@ export const projects: readonly Project[] = [
     title: "OP",
     client: "OP",
     clientLogo: "/SelectedWorks/Case3/op-logo.svg",
-    roles: ["Lead Designer", "Interaction Lead"],
-    lead: "Product design work with OP.",
-    description: "Case study description to follow.",
+    roles: ["Lead Product Designer", "UX Chapter Lead"],
+    lead:
+      "OP Mobiili. Five years at Finland's largest bank, designing on a channel that handles over 40 million interactions a month. I shipped new services from concept, owned the flows people actually live in day to day, and led the UX chapter of around 50 designers.",
+    description:
+      "OP Mobiili is where the bank meets most of its customers, most of the time, so the work there carried real weight. I concepted and shipped new services such as Säästölipas and Talouden tasapaino, and held the design ownership of high-traffic flows like tilitapahtumat that sit at the core of daily use. The work was omnichannel in scope, with mobile as the strategic priority.",
     heroImage: "/SelectedWorks/Case3/op.jpg",
     year: 2022,
   },
@@ -65,7 +67,7 @@ export const projects: readonly Project[] = [
     client: "Polar",
     clientLogo: "/SelectedWorks/Case4/polar.svg",
     clientLogoWidth: 120,
-    roles: ["Senior Product Designer"],
+    roles: ["Lead UX Designer"],
     lead: "Product design work with Polar on Polar Club.",
     description: "Case study description to follow.",
     heroImage: "/SelectedWorks/Case4/PolarClubWorkSampleNew-small.mp4",
@@ -77,7 +79,7 @@ export const projects: readonly Project[] = [
     client: "Alps Alpine",
     clientLogo: "/SelectedWorks/Case5/AlpsAlpine.svg",
     clientLogoWidth: 160,
-    roles: ["Creative Lead"],
+    roles: ["Creative Lead", "Product Design", "Art Director"],
     lead:
       "Mobile application and car IVI. A rebrand and UX refresh for Alps Alpine's consumer app and in-vehicle infotainment software. As Creative Lead, I set the creative direction, worked hands-on with UX and screens, and led a team of four designers across four countries to deliver a unified look and a multibrand design system spanning both surfaces.",
     description:
