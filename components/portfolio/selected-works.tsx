@@ -100,33 +100,34 @@ interface MobileWorkCardProps {
   chip?: string
 }
 
-// Full-viewport mobile card. Always renders complete content; the parent's
-// position:sticky drives the slide-up cover transition between works.
+// Full-viewport mobile card. Image fills the whole card; text panel rises
+// from the bottom and overlays the image. No internal scroll — description
+// is line-clamped so total content always fits the card height.
 function MobileWorkCard({ project, priority, chip }: MobileWorkCardProps) {
   const { resolvedTheme } = useTheme()
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[14px] border border-mainmenu-border">
-      <div className="relative w-full shrink-0" style={{ aspectRatio: "4 / 3" }}>
+    <div className="relative h-full overflow-hidden rounded-[14px] border border-mainmenu-border bg-selectedworks-background">
+      <div className="absolute inset-0">
         <HeroMedia
           src={resolveHeroSrc(project, resolvedTheme)}
           alt={project.title}
           sizes="100vw"
           priority={priority}
         />
-        {chip && (
-          <span className="absolute right-3 top-3 z-10 rounded-full bg-background/70 px-2.5 py-1 text-mono-label tabular-nums text-mainmenu-content backdrop-blur">
-            {chip}
-          </span>
-        )}
       </div>
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto border-t border-selectedworks-border bg-selectedworks-background p-5">
+      {chip && (
+        <span className="absolute right-3 top-3 z-20 rounded-full bg-background/70 px-2.5 py-1 text-mono-label tabular-nums text-mainmenu-content backdrop-blur">
+          {chip}
+        </span>
+      )}
+      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-3 border-t border-selectedworks-border bg-selectedworks-background p-4">
         <p className="text-mono-label uppercase text-muted-foreground">
           {project.roles.join(" · ")}
         </p>
         {project.clientLogo && (
           <div
-            className="h-14 shrink-0"
-            style={{ width: `${project.clientLogoWidth ?? 56}px` }}
+            className="h-12 shrink-0"
+            style={{ width: `${project.clientLogoWidth ?? 48}px` }}
           >
             <ClientLogoMask
               src={project.clientLogo}
@@ -137,7 +138,7 @@ function MobileWorkCard({ project, priority, chip }: MobileWorkCardProps) {
         <p className="text-body-paragraph text-selectedworks-content">
           {project.lead}
         </p>
-        <p className="text-body-small text-selectedworks-content">
+        <p className="line-clamp-5 text-body-small text-selectedworks-content">
           {project.description}
         </p>
       </div>
