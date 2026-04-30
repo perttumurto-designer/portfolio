@@ -65,7 +65,7 @@ export function MobileMainMenu({
       {/* Closed bar */}
       <div
         className={cn(
-          "flex w-full items-center justify-between rounded-lg p-5 backdrop-blur-md transition-opacity duration-300",
+          "flex w-full items-center justify-between rounded-lg p-3 backdrop-blur-md transition-opacity duration-300",
           isOpen && "invisible opacity-0",
         )}
       >
