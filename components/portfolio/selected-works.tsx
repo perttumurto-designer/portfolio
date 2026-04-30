@@ -23,8 +23,9 @@ const INTRO_DWELL = 0.12
 const STICKY_TOP_OFFSET_PX = 144
 const CASE_COUNT = projects.length
 const TRACK_VH = CASE_COUNT + 1
-const MOBILE_TRACK_VH = CASE_COUNT + 1
 const STICKY_TOP_OFFSET_MOBILE_PX = 80
+const MOBILE_TITLE_HEIGHT_PX = 60
+const MOBILE_CARD_TOP_PX = STICKY_TOP_OFFSET_MOBILE_PX + MOBILE_TITLE_HEIGHT_PX
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
 
 function isVideoSrc(src: string): boolean {
@@ -97,50 +98,47 @@ function HeroMedia({ src, alt, sizes, priority }: HeroMediaProps) {
 interface MobileWorkCardProps {
   project: Project
   priority?: boolean
-  chip?: string
 }
 
-// Full-viewport mobile card. Image fills the whole card; text panel rises
-// from the bottom and overlays the image. No internal scroll — description
-// is line-clamped so total content always fits the card height.
-function MobileWorkCard({ project, priority, chip }: MobileWorkCardProps) {
+// Mobile work card — natural-flow layout matching Figma node 275:1917.
+// Image is a fixed 240px block on top, InfoBox flexes underneath.
+// The outer overflow-hidden + rounded keeps corners clean without absolute
+// children competing with the clip path.
+function MobileWorkCard({ project, priority }: MobileWorkCardProps) {
   const { resolvedTheme } = useTheme()
   return (
-    <div className="relative h-full overflow-hidden rounded-[14px] border border-mainmenu-border bg-selectedworks-background">
-      <div className="absolute inset-0">
+    <div className="flex h-full flex-col overflow-hidden rounded-[14px] border border-mainmenu-border">
+      <div className="relative h-[240px] w-full shrink-0">
         <HeroMedia
           src={resolveHeroSrc(project, resolvedTheme)}
           alt={project.title}
-          sizes="100vw"
+          sizes="(max-width: 768px) calc(100vw - 40px), 0px"
           priority={priority}
         />
       </div>
-      {chip && (
-        <span className="absolute right-3 top-3 z-20 rounded-full bg-background/70 px-2.5 py-1 text-mono-label tabular-nums text-mainmenu-content backdrop-blur">
-          {chip}
-        </span>
-      )}
-      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-3 border-t border-selectedworks-border bg-selectedworks-background p-4">
-        <p className="text-mono-label uppercase text-muted-foreground">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden border-t border-selectedworks-border bg-selectedworks-background p-6">
+        <p className="text-mono-label-mobile uppercase text-muted-foreground">
           {project.roles.join(" · ")}
         </p>
-        {project.clientLogo && (
-          <div
-            className="h-12 shrink-0"
-            style={{ width: `${project.clientLogoWidth ?? 48}px` }}
-          >
-            <ClientLogoMask
-              src={project.clientLogo}
-              alt={project.client}
-            />
-          </div>
-        )}
-        <p className="text-body-paragraph text-selectedworks-content">
-          {project.lead}
-        </p>
-        <p className="line-clamp-5 text-body-small text-selectedworks-content">
-          {project.description}
-        </p>
+        <div className="flex flex-col gap-6">
+          {project.clientLogo && (
+            <div
+              className="h-[44px] shrink-0"
+              style={{ width: `${project.clientLogoWidth ?? 44}px` }}
+            >
+              <ClientLogoMask
+                src={project.clientLogo}
+                alt={project.client}
+              />
+            </div>
+          )}
+          <p className="text-body-paragraph-mobile text-selectedworks-content">
+            {project.leadMobile ?? project.lead}
+          </p>
+          <p className="text-body-small-mobile text-selectedworks-content">
+            {project.descriptionMobile ?? project.description}
+          </p>
+        </div>
       </div>
     </div>
   )
@@ -322,32 +320,38 @@ export function SelectedWorks() {
 
   return (
     <section id="selected-works" className="scroll-mt-24">
-      {/* Mobile: sticky-cover full-screen cards. CSS-only — each card pins
-          at top:STICKY_TOP_OFFSET_MOBILE_PX and the next sibling (higher
-          z-index) slides up to cover it as the user scrolls. */}
+      {/* Mobile: sticky-cover full-screen cards. h2 sticks just below the
+          navbar; cards stick below the h2 and the next sibling (higher
+          z-index) slides up to cover the previous one. Section height is
+          exactly the sum of flow content so the last card releases right
+          as the section ends — no trailing dead-scroll. */}
       <div
         className="relative md:hidden"
-        style={{ height: `${MOBILE_TRACK_VH * 100}vh` }}
+        style={{
+          height: `calc(${MOBILE_TITLE_HEIGHT_PX}px + ${CASE_COUNT} * (100svh - ${MOBILE_CARD_TOP_PX}px))`,
+        }}
       >
-        <h2 className="text-heading-h2-mobile px-6 pb-3 pt-4 text-center text-mainmenu-content">
+        <h2
+          className="sticky z-30 flex items-center justify-center bg-background px-5 text-center text-heading-h2-mobile text-mainmenu-content"
+          style={{
+            top: `${STICKY_TOP_OFFSET_MOBILE_PX}px`,
+            height: `${MOBILE_TITLE_HEIGHT_PX}px`,
+          }}
+        >
           Few selected works
         </h2>
         {projects.map((p, i) => (
           <div
             key={p.slug}
-            className="bg-background px-4 pb-4"
+            className="px-5 pb-5"
             style={{
               position: "sticky",
-              top: `${STICKY_TOP_OFFSET_MOBILE_PX}px`,
-              height: `calc(100svh - ${STICKY_TOP_OFFSET_MOBILE_PX}px)`,
+              top: `${MOBILE_CARD_TOP_PX}px`,
+              height: `calc(100svh - ${MOBILE_CARD_TOP_PX}px)`,
               zIndex: i + 1,
             }}
           >
-            <MobileWorkCard
-              project={p}
-              priority={i < 2}
-              chip={`${String(i + 1).padStart(2, "0")} / ${String(CASE_COUNT).padStart(2, "0")}`}
-            />
+            <MobileWorkCard project={p} priority={i < 2} />
           </div>
         ))}
       </div>
