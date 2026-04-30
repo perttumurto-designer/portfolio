@@ -122,8 +122,8 @@ function MobileWorkCard({ project, priority }: MobileWorkCardProps) {
         </p>
         {project.clientLogo && (
           <div
-            className="h-[44px] shrink-0"
-            style={{ width: `${project.clientLogoWidth ?? 44}px` }}
+            className="h-[26px] shrink-0"
+            style={{ width: `${(project.clientLogoWidth ?? 44) * 0.6}px` }}
           >
             <ClientLogoMask src={project.clientLogo} alt={project.client} />
           </div>
