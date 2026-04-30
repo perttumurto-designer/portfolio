@@ -120,25 +120,17 @@ function MobileWorkCard({ project, priority }: MobileWorkCardProps) {
         <p className="text-mono-label-mobile uppercase text-muted-foreground">
           {project.roles.join(" · ")}
         </p>
-        <div className="flex flex-col gap-6">
-          {project.clientLogo && (
-            <div
-              className="h-[44px] shrink-0"
-              style={{ width: `${project.clientLogoWidth ?? 44}px` }}
-            >
-              <ClientLogoMask
-                src={project.clientLogo}
-                alt={project.client}
-              />
-            </div>
-          )}
-          <p className="text-body-paragraph-mobile text-selectedworks-content">
-            {project.leadMobile ?? project.lead}
-          </p>
-          <p className="text-body-small-mobile text-selectedworks-content">
-            {project.descriptionMobile ?? project.description}
-          </p>
-        </div>
+        {project.clientLogo && (
+          <div
+            className="h-[44px] shrink-0"
+            style={{ width: `${project.clientLogoWidth ?? 44}px` }}
+          >
+            <ClientLogoMask src={project.clientLogo} alt={project.client} />
+          </div>
+        )}
+        <p className="text-body-paragraph-mobile text-selectedworks-content">
+          {project.leadMobile ?? project.lead}
+        </p>
       </div>
     </div>
   )
@@ -148,7 +140,40 @@ export function SelectedWorks() {
   const isMobile = useIsMobile()
   const { resolvedTheme } = useTheme()
   const desktopTrackRef = useRef<HTMLDivElement>(null)
+  const mobileTrackRef = useRef<HTMLDivElement>(null)
+  const mobileTitleRef = useRef<HTMLHeadingElement>(null)
   const [progress, setProgress] = useState(0)
+
+  // Mobile: translate the sticky h2 upward as the section bottom passes the
+  // viewport bottom, so the title scrolls away in lockstep with the last card
+  // releasing its sticky pin (instead of lingering at top:80 while card 4 has
+  // already started lifting off).
+  useEffect(() => {
+    if (!isMobile) return
+    const section = mobileTrackRef.current
+    const title = mobileTitleRef.current
+    if (!section || !title) return
+
+    let rafId = 0
+    const update = () => {
+      rafId = 0
+      const rect = section.getBoundingClientRect()
+      const overshoot = Math.max(0, window.innerHeight - rect.bottom)
+      title.style.transform = overshoot > 0 ? `translate3d(0, -${overshoot}px, 0)` : ""
+    }
+    const onScroll = () => {
+      if (rafId === 0) rafId = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      title.style.transform = ""
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+    }
+  }, [isMobile])
 
   useEffect(() => {
     // Mobile relies entirely on CSS position:sticky for the slide-up cover.
@@ -326,13 +351,15 @@ export function SelectedWorks() {
           exactly the sum of flow content so the last card releases right
           as the section ends — no trailing dead-scroll. */}
       <div
+        ref={mobileTrackRef}
         className="relative md:hidden"
         style={{
           height: `calc(${MOBILE_TITLE_HEIGHT_PX}px + ${CASE_COUNT} * (100svh - ${MOBILE_CARD_TOP_PX}px))`,
         }}
       >
         <h2
-          className="sticky z-30 flex items-center justify-center bg-background px-5 text-center text-heading-h2-mobile text-mainmenu-content"
+          ref={mobileTitleRef}
+          className="sticky z-30 flex items-center justify-center bg-background px-5 text-center text-heading-h2-mobile text-mainmenu-content will-change-transform"
           style={{
             top: `${STICKY_TOP_OFFSET_MOBILE_PX}px`,
             height: `${MOBILE_TITLE_HEIGHT_PX}px`,
