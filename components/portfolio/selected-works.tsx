@@ -28,7 +28,7 @@ const MOBILE_TITLE_HEIGHT_PX = 60
 const MOBILE_CARD_TOP_PX = STICKY_TOP_OFFSET_MOBILE_PX + MOBILE_TITLE_HEIGHT_PX
 // Each card pins this many px lower than the previous so the rounded top of
 // each underlying card peeks above the active card — stacked-deck effect.
-const MOBILE_CARD_PEEK_PX = 16
+const MOBILE_CARD_PEEK_PX = 8
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i
 
 function isVideoSrc(src: string): boolean {
