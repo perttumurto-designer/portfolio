@@ -112,7 +112,7 @@ function MobileWorkCard({ project, priority }: MobileWorkCardProps) {
         <HeroMedia
           src={resolveHeroSrc(project, resolvedTheme)}
           alt={project.title}
-          sizes="(max-width: 768px) calc(100vw - 40px), 0px"
+          sizes="(max-width: 768px) 100vw, 0px"
           priority={priority}
         />
       </div>
@@ -370,7 +370,7 @@ export function SelectedWorks() {
         {projects.map((p, i) => (
           <div
             key={p.slug}
-            className="px-5 pb-5"
+            className="pb-5"
             style={{
               position: "sticky",
               top: `${MOBILE_CARD_TOP_PX}px`,
