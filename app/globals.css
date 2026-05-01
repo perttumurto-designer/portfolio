@@ -246,7 +246,7 @@
 
 @utility text-body-paragraph-mobile {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.125rem;
   letter-spacing: 0;
